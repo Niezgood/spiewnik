@@ -322,7 +322,7 @@
   .repeat-block {
     display: inline-block;
     position: relative;
-    padding: 0.2rem 0;
+    padding: 0.2rem 3.2rem 0.2rem 0;
     margin: 0.3rem 0;
     overflow: visible;
   }
@@ -2166,19 +2166,34 @@ function positionRepeatBrackets() {
   const ctx = document.createElement('canvas').getContext('2d');
   ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
 
+  // szerokość kontenera tekstu (bez scroll) — klamra nie może jej przekroczyć
+  const containerWidth = lyricsEl.getBoundingClientRect().width;
+  // miejsce zarezerwowane na klamrę + etykietę (odpowiada padding-right: 3.2rem)
+  const BRACKET_RESERVED = 3.2 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+
   document.querySelectorAll('#detail-lyrics .repeat-block').forEach(block => {
     let maxWidth = 0;
     block.textContent.split('\n').forEach(line => {
       const w = ctx.measureText(line).width;
       if (w > maxWidth) maxWidth = w;
     });
-    const blockWidth = block.getBoundingClientRect().width;
-    const bracketLeft = maxWidth > blockWidth
-      ? Math.round(blockWidth) - 2          // tekst się zawija — klamra przy krawędzi
+    // dostępna szerokość na tekst = szerokość kontenera minus padding na klamrę
+    const availableWidth = containerWidth - BRACKET_RESERVED;
+    const bracketLeft = maxWidth > availableWidth
+      ? Math.round(availableWidth) + 4      // tekst się zawija — klamra zaraz za dostępnym obszarem
       : Math.round(maxWidth + 12);          // tekst mieści się — klamra za tekstem z odstępem
     block.style.setProperty('--bracket-left', bracketLeft + 'px');
   });
 }
+
+// --- Przelicz klamry po zmianie rozmiaru / obróceniu telefonu ---
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => {
+    if (currentView === 'song') requestAnimationFrame(positionRepeatBrackets);
+  }, 150);
+});
 
 // --- Show song detail view ---
 function showSong(song) {
