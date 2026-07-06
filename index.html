@@ -2151,7 +2151,11 @@ function positionRepeatBrackets() {
       const w = ctx.measureText(line).width;
       if (w > maxWidth) maxWidth = w;
     });
-    block.style.setProperty('--bracket-left', Math.round(maxWidth + 12) + 'px');
+    const blockWidth = block.getBoundingClientRect().width;
+    const bracketLeft = maxWidth > blockWidth
+      ? Math.round(blockWidth) - 2          // tekst się zawija — klamra przy krawędzi
+      : Math.round(maxWidth + 12);          // tekst mieści się — klamra za tekstem z odstępem
+    block.style.setProperty('--bracket-left', bracketLeft + 'px');
   });
 }
 
