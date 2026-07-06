@@ -1,7 +1,7 @@
 const CACHE_NAME = 'spiewnik-v1';
 const ASSETS = [
-  '/',
-  '/index.html'
+  './',
+  './index.html'
 ];
 
 self.addEventListener('install', event => {

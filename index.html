@@ -2252,7 +2252,7 @@ applyFontSize();
 
 // --- Service Worker ---
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(() => {
+  navigator.serviceWorker.register('./sw.js').then(() => {
     // Show offline-ready banner after first cache
     navigator.serviceWorker.ready.then(() => {
       const banner = document.getElementById('offline-banner');
