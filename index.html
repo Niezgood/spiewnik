@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Śpiewnik Weselny</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #7a9e7e;
+    --sage-light: #a8c5ab;
+    --sage-dark: #4e6e52;
+    --gold: #c9a84c;
+    --gold-light: #e8cc7a;
+    --gold-dark: #9a7a2e;
+    --cream: #fdfaf5;
+    --white: #ffffff;
+    --text: #2c2c2c;
+    --text-light: #6b6b6b;
+    --shadow: rgba(201,168,76,0.15);
+    --font-size: 19px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    font-size: var(--font-size);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* GOLD STRIPE */
+  .gold-stripe {
+    height: 7px;
+    background: linear-gradient(90deg,
+      transparent 0%, #a07c18 3%, #d4aa3a 15%,
+      #f0d96a 35%, #faeea0 50%,
+      #f0d96a 65%, #d4aa3a 85%,
+      #a07c18 97%, transparent 100%);
+    flex-shrink: 0;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(to right,
+      var(--sage) 0%,
+      #c8deca 18%,
+      var(--white) 36%,
+      var(--white) 64%,
+      #c8deca 82%,
+      var(--sage) 100%
+    );
+    text-align: center;
+    padding: 0.9rem 1.5rem 0.7rem;
+    position: relative;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.4rem, 8vw, 3.6rem);
+    color: var(--gold-dark);
+    line-height: 1.1;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 4px rgba(154,122,46,0.15);
+  }
+  .header-subtitle {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+    color: var(--sage-dark);
+    position: relative;
+    z-index: 1;
+    margin-top: 0.2rem;
+    line-height: 1.2;
+  }
+
+
+  /* CONTROLS BAR */
+  .controls {
+    background: var(--white);
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    padding: 0.65rem 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(154,122,46,0.1);
+  }
+  .search-wrap { flex: 1; position: relative; }
+  .search-icon {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-dark);
+    font-size: 0.95rem;
+    pointer-events: none;
+  }
+  #search {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.4rem;
+    border: 1.5px solid #bbb;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    outline: none;
+    background: var(--white);
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  #search:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+  #search::placeholder { color: #999; font-style: italic; font-weight: 400; }
+  #search { padding-right: 2.2rem; }
+  .search-clear {
+    display: none;
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.15rem;
+  }
+  .search-clear:hover { color: var(--text); }
+  .font-controls { display: flex; gap: 0.4rem; align-items: center; }
+  .btn-font {
+    background: var(--white);
+    color: var(--gold-dark);
+    border: 1.5px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    font-size: 0.95rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .btn-font:hover { background: #fdf5e0; }
+  .btn-font:active { transform: scale(0.92); }
+  #font-size-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    font-family: sans-serif;
+    text-align: center;
+    min-width: 20px;
+    font-weight: 600;
+  }
+
+  /* BREADCRUMB */
+  #breadcrumb {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    background: var(--white);
+    border-bottom: 1px solid rgba(201,168,76,0.18);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  #breadcrumb-arrow {
+    background: var(--white);
+    border: 1.5px solid rgba(201,168,76,0.45);
+    cursor: pointer;
+    color: var(--gold-dark);
+    font-size: 1rem;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+  }
+  #breadcrumb-arrow:hover { background: #fdf5e0; }
+  #breadcrumb-arrow:active { transform: scale(0.92); }
+
+  #breadcrumb-title {
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  /* SONG COUNT */
+  .song-count {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* SONG LIST */
+  #song-list {
+    padding: 0.5rem 0.75rem 3rem;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .song-card {
+    background: var(--white);
+    border-radius: 4px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-left: 3px solid var(--gold);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.15s, border-left-color 0.2s;
+    cursor: pointer;
+  }
+  .song-card:hover { box-shadow: 0 3px 16px rgba(201,168,76,0.2); transform: translateX(3px); border-left-color: var(--sage); }
+  .song-card:active { transform: scale(0.99); }
+  .song-header {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    gap: 0.9rem;
+  }
+  .song-title-wrap { display: flex; align-items: center; gap: 0.65rem; flex: 1; min-width: 0; }
+
+  .song-title {
+    font-size: 1.1em;
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .song-arrow {
+    color: var(--gold-light);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  /* SONG DETAIL VIEW */
+  #song-detail {
+    display: none;
+    padding: 0.75rem 0.75rem 3rem;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .detail-card {
+    background: var(--white);
+    border-radius: 8px;
+    border: 1px solid rgba(201,168,76,0.28);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    padding: 1.6rem 1.3rem 2rem;
+  }
+
+  .detail-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55em;
+    font-weight: 600;
+    color: var(--sage-dark);
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+  .detail-divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 0 auto 1.5rem;
+  }
+  .song-lyrics {
+    white-space: pre-wrap;
+    line-height: 1.85;
+    color: var(--text);
+    font-size: 1.05em;
+    font-weight: 600;
+  }
+  .verse-marker {
+    display: block;
+    font-family: sans-serif;
+    font-size: 0.7em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold-dark);
+    margin: 1.4rem 0 0.4rem;
+  }
+  .chorus-marker {
+    display: block;
+    font-family: sans-serif;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--sage-dark);
+    margin: 1.4rem 0 0.4rem;
+  }
+  .repeat-block {
+    display: inline-block;
+    position: relative;
+    padding: 0.2rem 0;
+    margin: 0.3rem 0;
+    overflow: visible;
+  }
+  .repeat-block::before {
+    content: '';
+    position: absolute;
+    left: var(--bracket-left, 80%);
+    top: 0;
+    bottom: 0;
+    width: 0.5rem;
+    border: 2px solid var(--text);
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+  }
+  .repeat-block::after {
+    content: "×" attr(data-count);
+    position: absolute;
+    left: calc(var(--bracket-left, 80%) + 1.2rem);
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* NO RESULTS */
+  .no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-light);
+    font-size: 1rem;
+    display: none;
+    font-style: italic;
+  }
+  .no-results .emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 1.2rem 1rem;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 1px;
+    font-style: italic;
+    border-top: 1px solid rgba(201,168,76,0.25);
+    margin-top: auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="gold-stripe"></div>
+<header>
+  <h1 class="header-title">Śpiewnik Weselny</h1>
+  <p class="header-subtitle">Katarzyna &amp; Piotr</p>
+
+</header>
+<div class="gold-stripe"></div>
+
+<div class="controls" id="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="search" placeholder="Szukaj piosenki…" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="search-clear" id="search-clear" aria-label="Wyczyść wyszukiwanie">✕</button>
+  </div>
+  <div class="font-controls">
+    <button class="btn-font" id="font-down" aria-label="Zmniejsz czcionkę">A−</button>
+    <span id="font-size-label">A</span>
+    <button class="btn-font" id="font-up" aria-label="Zwiększ czcionkę">A+</button>
+  </div>
+</div>
+
+<div id="breadcrumb">
+  <button id="breadcrumb-arrow" aria-label="Wróć">←</button>
+  <span id="breadcrumb-title"></span>
+</div>
+
+<div class="song-count" id="song-count"></div>
+
+<div id="song-list"></div>
+<div class="no-results" id="no-results">
+  <span class="emoji">🎵</span>
+  Nie znaleziono piosenki.<br>Spróbuj innego słowa.
+</div>
+
+<div id="song-detail">
+  <div class="detail-card">
+    <div class="detail-title" id="detail-title"></div>
+    <div class="detail-divider"></div>
+    <div class="song-lyrics" id="detail-lyrics"></div>
+  </div>
+</div>
+
+<div id="offline-banner" style="display:none;opacity:1;transition:opacity 0.6s;position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4e6e52,#7a9e7e);color:#fff;padding:0.7rem 1.4rem;border-radius:50px;font-family:sans-serif;font-size:0.82rem;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(0,0,0,0.2);align-items:center;gap:0.5rem;z-index:999;white-space:nowrap;">
+  ✅ &nbsp;Śpiewnik działa też bez internetu!
+</div>
+
+<footer>🌿 &nbsp; 11 lipca 2026 &nbsp; 🌿</footer>
+
+<script>
+const SONGS = [
+  {
+    title: "Bal u weteranów",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Dzisiaj bal u weteranów, każdy zna tych panów,
+Bo tam co niedziela jest zabawy wiela.
+Choć komitet za wstęp bierzy czterdzieści halerzy,
+Ale wyznać szczerzy, co wart, ta joj!
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 2</span>Z panną Manią jakiś frajer wielgi piniądz traci,
+Trzy gilajzy piwa przy bufecie płaci.
+Ona wielgim państwu służy, taj do niego jurzy:
+„Sznycli mam w blaturzy, ta przyjdź pan, przyjdź!"
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 3</span>Tam ci znowu jakiś frajer w kozaka się bawi,
+Kastet ma w kieszeni, a majcher w rękawi.
+Ty do niego ani słowa, naj ci Bóg zachowa,
+Bo on z Łyczakowa je gość, je gość!
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 4</span>A tam znowu jakaś menda po sali si szwenda,
+Malowane lica, szuka sy kibica.
+Ali ona go ni znajdzi, bo ona bidaczka,
+Pójdzi do Babaczka na szmelc, na szmelc!
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 5</span>Pan Bazyli wielki galant, za całe pińć centa,
+Kupił czekulady Mańce na prezenta.
+I on do niej tak powiada: „Niech nu Mańka zjada,
+Bo to czekulada jest, ta jest!"
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 6</span>Tam na sali Pan Bazyli przeprasza na chwili,
+Bo mu portki pękli, het na samym tyli.
+A, że samo to nie chyci, trzeba iść po nici,
+Bo człek ciałem świci, ta joj, ta joj!
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 7</span>A tam znowu jakaś szarża mocno si obraża:
+„Bo ja mam nagniotki, najrzy pan uważa!"
+Ja nie lubie gadać wieli, ty, cywilny cieli,
+Tylko w morde strzeli, ta już, ta joj!
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!
+<span class="verse-marker">Zwrotka 8</span>O północy si zjawili jacyś dwa cywili,
+Mordy podrapane, włosy jak badyli.
+Nic nikomu ni mówili, tylko w mordy bili,
+Tak bal zakończyli, ta już, ta joj!
+<span class="chorus-marker">Refren</span>A muzyczka ino, ano, a muzyczka rżnie,
+Bo przy tej muzyczce goście bawią się (wesoło!).
+Wszystko jedno, czy to męska, czy to damska jest,
+Byle tylko rżnęła fest, a fest!
+
+Maniuśka, moja Maniuśka, chodźże ze mną rwać jabłuszka!
+Maniuśka, moja Maniuśka, chodźże ze mną rwać!`
+  },
+  {
+    title: "Głęboka studzienka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Głęboka studzienka, głęboko kopana,
+A przy niej Kasieńka, jakby malowana.
+<span class="verse-marker">Zwrotka 2</span>Przy studzience stała, wodę nabierała,
+O swoim Jasieńku – kochanku myślała.
+<span class="verse-marker">Zwrotka 3</span>Głęboka studzienko, czy mam do cię skoczyć
+Za moim Jasieńkiem, co ma czarne oczy?
+<span class="verse-marker">Zwrotka 4</span>Żebym cię, Jasieńku, w wodzie zobaczyła,
+To bym ja za tobą do wody wskoczyła.
+<span class="verse-marker">Zwrotka 5</span>Nie skoczę do ciebie, studzienjo głęboka,
+Daleko jest do dna i zimna tam woda.
+<span class="verse-marker">Zwrotka 6</span>Najpierw bym rzuciła ten biały wianeczek,
+Com sobie uwiła ze samych różyczek.
+<span class="verse-marker">Zwrotka 7</span>Ucałuję listek, szeroki, dębowy,
+Razem z pozdrowieniem rzucę go do wody.
+<span class="verse-marker">Zwrotka 8</span>Zanieś go studzienko do Jasieńka mego,
+Powiedź mu ode mnie, że czekam na niego.`
+  },
+  {
+    title: "Heca Kieca",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Heca kieca kiele pieca,
+Cielę mnie pobodło,
+Matula mnie smarowała,
+Ale nie pomogło.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 2</span>A ja za nią do pszenicy,
+A ja za nią do żyta,
+Ja żem myślał, że to panna,
+A to była kobita.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 3</span>A ja jego za onego,
+A on mnie za onę,
+A ja jego za skowronka,
+A on mnie za wronę.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 4</span>Ja z Malinką pod pierzynkę,
+Pierzynka niemnąca,
+Ja Malinkę za cytrynkę,
+Cytrynka gorąca.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 5</span>A mój szwagier z moim wujem
+To byli ryzyki,
+Ulepili babę z gliny,
+Skakali jak byki.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 6</span>Jakem robił u kowala,
+Uczyłem się dymać,
+Kowal wlazł na kowalkę,
+Musiałem go trzymać.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 7</span>Leci owca od Sosnowca
+A baranek za nią,
+Jak się owca przewróciła,
+To baranek na nią.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.
+<span class="verse-marker">Zwrotka 8</span>Już nie będę taka głupia,
+Jak w zeszłą niedzielę,
+Chłopaki mnie całowali,
+Ja stałam jak ciele.
+<span class="chorus-marker">Refren</span>I jo se też musioł,
+Bo mi se porusoł,
+Hej, mości panowie, kapelusz na głowie.
+I jo se musiała, bo mi se rusała,
+Hej, mości panowie, chusteczka na głowie.`
+  },
+  {
+    title: "Hej, Górol ci jo, Górol",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Hej, górol, ci jo, górol,
+Hej, spod samiuśkich Tater,
+Hej, descyk mnie wykąpoł,
+Hej, wykołysol wiater.
+<span class="verse-marker">Zwrotka 2</span>Hej, descyk mnie wykąpoł,
+Hej, wiater wykołysol,
+Hej, cózem sie napłokał,
+Ale mnie nikt nie słysał.
+<span class="verse-marker">Zwrotka 3</span>Hej, nicego mi nie żal,
+Hej, ino kapelusa,
+Hej, cok sie jej nakłanioł,
+Hej, nie chciała psia dusa!
+<span class="verse-marker">Zwrotka 4</span>Hej, góry moje, góry,
+Hej, góry i doliny,
+Hej, najpikniejsze w świecie
+Góralskie som dziewcyny!`
+  },
+  {
+    title: "Hej z góry, z góry",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Hej z góry, z góry jadą Mazury,</span>
+<span class="repeat-block" data-count="2">Jedzie, jedzie Mazureczek,
+Wiezie, wiezie mój wianeczek rozmarynowy.</span>
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">Przyjechał w nocy koło północy,</span>
+<span class="repeat-block" data-count="2">Puka, stuka w okieneczko:
+Otwórz, otwórz panieneczko, koniom wody daj.</span>
+<span class="verse-marker">Zwrotka 3</span><span class="repeat-block" data-count="2">Jakże ja mam wstać koniom wody dać,</span>
+<span class="repeat-block" data-count="2">Kiedy mamcia zakazała,
+Żebym chłopcom nie dawała, trzeba jej się bać.</span>
+<span class="verse-marker">Zwrotka 4</span><span class="repeat-block" data-count="2">Mamy się nie bój, wsiadaj na koń mój,</span>
+<span class="repeat-block" data-count="2">Pojedziemy w obce kraje,
+Tam są inne obyczaje, malowany wóz.</span>
+<span class="verse-marker">Zwrotka 5</span><span class="repeat-block" data-count="2">Przez wieś jechali, ludzie gadali,</span>
+<span class="repeat-block" data-count="2">Cóż to, cóż to za dziewczyna,
+Cóż to, cóż to za jedyna jedzie z chłopcami.</span>`
+  },
+  {
+    title: "Hej, bystra woda",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Hej, bystra woda, bystra wodzicka, pytało dziewce o Janicka.
+<span class="repeat-block" data-count="2">Hej, lesie ciemny, wirsku zielony, ka mój Janicek umiłony?</span>
+<span class="verse-marker">Zwrotka 2</span>Hej, mój Janicku, miły Janicku, nie chodź po orawskim chodniku.
+<span class="repeat-block" data-count="2">Hej, dosyć żeś już nagnał łowiecek, ostań przy dziewcynie kolwiecek!</span>
+<span class="verse-marker">Zwrotka 3</span>Hej, powiadali, hej powiadali, hej, że Janicka porubali.
+<span class="repeat-block" data-count="2">Hej porubały go Orawiany, hej, za łowiecki, za barany.</span>
+<span class="verse-marker">Zwrotka 4</span>Hej, mówiłam ci, miły Janicku, nie chodź po Orawskim chodniku.
+<span class="repeat-block" data-count="2">Hej, bo cie te orawskie juhasy długie uz hań cekali casy.</span>
+<span class="verse-marker">Zwrotka 5</span>Hej, dziwce słocha, hej, dziwce płace: uz, że Janicka nie obace.
+<span class="repeat-block" data-count="2">U orawskiego zamecku ściany, leży Janicek porubany.</span>
+<span class="verse-marker">Zwrotka 6</span>Hej, dolom, dolom od skalnych Tater, hej, poświstuje halny wiater.
+<span class="repeat-block" data-count="2">Hej, poświstuje, hej, ciska bidom, hej, po dolinach chłopcy idom.</span>`
+  },
+  {
+    title: "Hej, sokoły (Ukraina)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Hej, tam gdzieś znad czarnej wody
+Siada na koń kozak młody,
+Czule żegna się z dziewczyną,
+Jeszcze czulej z U – kra – i – ną.
+<span class="chorus-marker">Refren</span>Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy sko – wro – ne – czku!
+Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy dzwoń, dzwoń, dzwoń.
+<span class="verse-marker">Zwrotka 2</span>Wiele dziewcząt jest na świecie,
+Lecz najwięcej w Ukrainie,
+Tam me serce pozostało
+Przy kochanej mej dziewczynie.
+<span class="chorus-marker">Refren</span>Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy sko – wro – ne – czku!
+Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy dzwoń, dzwoń, dzwoń.
+<span class="verse-marker">Zwrotka 3</span>Ona jedna tam została,
+Jaskółeczka moja mała,
+A ja tutaj w obcej stronie
+Dniem i nocą tęsknię do niej.
+<span class="chorus-marker">Refren</span>Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy sko – wro – ne – czku!
+Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy dzwoń, dzwoń, dzwoń.
+<span class="verse-marker">Zwrotka 4</span>Żal, żal za dziewczyną,
+Za zieloną Ukrainą,
+Żal, żal, serce płacze,
+Już cię więcej nie zobaczę.
+<span class="chorus-marker">Refren</span>Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy sko – wro – ne – czku!
+Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy dzwoń, dzwoń, dzwoń.
+<span class="verse-marker">Zwrotka 5</span>Wina, wina, wina dajcie,
+A jak umrę pochowajcie,
+Na zielonej Ukrainie
+Przy kochanej mej dziewczynie.
+<span class="chorus-marker">Refren</span>Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy sko – wro – ne – czku!
+Hej, hej, hej, sokoły,
+Omijajcie góry, lasy, doły!
+Dzwoń, dzwoń, dzwoń dzwoneczku,
+Mój stepowy dzwoń, dzwoń, dzwoń.`
+  },
+  {
+    title: "Jak dobrze nam zdobywać góry",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Jak dobrze nam zdobywać góry
+I młodą piersią chłonąć wiatr,
+Prężnymi stopy deptać chmury
+I palce ranić o szczyt Tatr.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Mieć w uszach szum, strumieni śpiew,
+A w żyłach roztętnioną krew.</span>
+Hejże hej, hejże ha!
+Żyjmy więc, póki czas.
+Bo kto wie, bo kto wie,
+Kiedy znowu ujrzym was?
+<span class="verse-marker">Zwrotka 2</span>Jak dobrze nam głęboką nocą
+Wędrować jasną wstęgą szos,
+Patrzeć, jak gwiazdy niebo złocą
+I czekać, co przyniesie los.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Mieć w uszach szum, strumieni śpiew,
+A w żyłach roztętnioną krew.</span>
+Hejże hej, hejże ha!
+Żyjmy więc, póki czas.
+Bo kto wie, bo kto wie,
+Kiedy znowu ujrzym was?
+<span class="verse-marker">Zwrotka 3</span>Jak dobrze nam po wielkich szczytach
+Wracać w doliny, progi swe,
+Przyjaciół jasne twarze witać,
+O, młoda duszo, raduj się!
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Mieć w uszach szum, strumieni śpiew,
+A w żyłach roztętnioną krew.</span>
+Hejże hej, hejże ha!
+Żyjmy więc, póki czas.
+Bo kto wie, bo kto wie,
+Kiedy znowu ujrzym was?`
+  },
+  {
+    title: "Jak długo na Wawelu",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Jak długo w sercach naszych
+Choć kropla polskiej krwi,
+Jak długo w sercach naszych
+Ojczysta miłość tkwi,
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Stać będzie kraj nasz cały,
+Stać będzie Piastów gród,
+Zwycięży Orzeł Biały,
+Zwycięży polski lud.</span>
+<span class="verse-marker">Zwrotka 2</span>Jak długo na Wawelu
+Brzmi Zygmuntowski Dzwon,
+Jak długo z gór karpackich
+Rozbrzmgiewa polski ton,
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Stać będzie kraj nasz cały,
+Stać będzie Piastów gród,
+Zwycięży Orzeł Biały,
+Zwycięży polski lud.</span>
+<span class="verse-marker">Zwrotka 3</span>Jak długo Wisła wody
+Na Bałtyk będzie lać,
+Jak długo polskie grody
+Nad Wisłą będą stać,
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Stać będzie kraj nasz cały,
+Stać będzie Piastów gród,
+Zwycięży Orzeł Biały,
+Zwycięży polski lud.</span>
+<span class="verse-marker">Zwrotka 4</span>Jak długo święta wiara
+Ożywia polską krew,
+Stać będzie Polska stara,
+Bo każdy Polak lew.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Stać będzie kraj nasz cały,
+Stać będzie Piastów gród,
+Zwycięży Orzeł Biały,
+Zwycięży polski lud.</span>`
+  },
+  {
+    title: "Jarzębina czerwona",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Zapadł cichy wieczór, już ucichł wiatru wiew,
+Gdzieś w oddali płynie harmonii tęskny śpiew.
+Biegnę wąską dróżką, co pośród gór się pnie,
+Tam pod jarzębiną dwóch chłopców czeka mnie.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Jarzębino czerwona, któremu serce dać?
+Jarzębino czerwona, biednemu sercu radź.</span>
+<span class="verse-marker">Zwrotka 2</span>Jeden dzielny to – karz, a drugi kowal zuch.
+Co mam biedna robić? Podoba mi się dwóch.
+Obaj tacy mili i każdy dobry druh.
+Droga jarzębino, którego wybrać, mów.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Jarzębino czerwona, któremu serce dać?
+Jarzębino czerwona, biednemu sercu radź.</span>
+<span class="verse-marker">Zwrotka 3</span>Tylko jarzębi – na poradzić może mi,
+Ja nie mogę wybrać, choć myślę tyle dni.
+Przeszła wiosna, lato, już jesień złotem lśni,
+Już ze mnie śmieją dziewczęta z całej wsi.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Jarzębino czerwona, któremu serce dać?
+Jarzębino czerwona, biednemu sercu radź.</span>`
+  },
+  {
+    title: "Jeszcze po kropelce",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Jeszcze po kropelce, jeszcze po kropelce,
+Póki piwo jest w butelce,
+Pijmy aż do rana, pijmy aż do rana i śpiewajmy: dana, dana.
+<span class="verse-marker">Zwrotka 2</span>Jeszcze po kropelce, jeszcze po kropelce,
+Póki wino jest w butelce,
+Pijmy aż do rana, pijmy aż do rana i śpiewajmy: dana, dana.
+<span class="verse-marker">Zwrotka 3</span>Jeszcze po kropelce, jeszcze po kropelce,
+Póki wódka jest w butelce,
+Pijmy aż do rana, pijmy aż do rana i śpiewajmy: dana, dana.
+<span class="verse-marker">Zwrotka 4</span>Pijmy wino duszkiem, pijmy wino duszkiem,
+Tym garnuszkiem, co pod łóżkiem,
+Pijmy aż do rana, pijmy aż do rana i śpiewajmy: dana, dana.
+<span class="verse-marker">Zwrotka 5</span>Panie szofer, gazu, panie szofer, gazu,
+Bo pół litra jest w garażu.
+Panie szofer setką, panie szofer setką, a z powrotem już karetką.
+<span class="verse-marker">Zwrotka 6</span>Panie szofer, dwieście, panie szofer, dwieście,
+A z powrotem już w areszcie.
+Panie szofer trzysta, panie szofer trzysta,
+Bo w garażu czeka czysta.`
+  },
+  {
+    title: "Karolinka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Poszła Karolinka do Gogolina,</span>
+<span class="repeat-block" data-count="2">A Karliczek za nią, a Karliczek za nią z flaszeczką wina.</span>
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">Szła do Gogolina, przed się patrzała,</span>
+<span class="repeat-block" data-count="2">Ani się na swego synka szykownego nie obejrzała.</span>
+<span class="verse-marker">Zwrotka 3</span><span class="repeat-block" data-count="2">Prowadźże mnie, dróżko, hen, w szeroki świat,</span>
+<span class="repeat-block" data-count="2">Znajdę tam inszego syneczka miłego, co mi będzie rad.</span>
+<span class="verse-marker">Zwrotka 4</span><span class="repeat-block" data-count="2">Nie goń mnie, Karliczku, czego po mnie chcesz?</span>
+<span class="repeat-block" data-count="2">Joch ci już pędziała, nie byda cie chciała, som to przeca wiesz.</span>
+<span class="verse-marker">Zwrotka 5</span><span class="repeat-block" data-count="2">Wróć się, Karolinko, bo jadą gości!</span>
+<span class="repeat-block" data-count="2">Jo się już nie wróca, jo się już nie wróca, boch jest na moście.</span>
+<span class="verse-marker">Zwrotka 6</span><span class="repeat-block" data-count="2">Wróć się, Karolinko, czemu idziesz precz?</span>
+Nie odpowiem tobie, po swojemu zrobię, to nie twoja rzecz!
+Nie odpowiedziała, synka odbiegała, oj, okropno rzecz!`
+  },
+  {
+    title: "Krakowianka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Jestem sobie Krakowianka, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">Mam fartuszek po kolanka, faj duli, faj duli, faj.</span>
+<span class="verse-marker">Zwrotka 2</span>A spódniczkę jeszcze wyżej, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">Żeby chłopców ściągnąć bliżej, faj duli, faj duli, faj.</span>
+<span class="verse-marker">Zwrotka 3</span>Kiedy idę do kościoła, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">Chłopców przy mnie dookoła, faj duli, faj duli, faj.</span>
+<span class="verse-marker">Zwrotka 4</span>Na jednego mrugnę oczkiem, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">A drugiego trącę łokciem, faj duli, faj duli, faj.</span>
+<span class="verse-marker">Zwrotka 5</span>A trzeciemu dam buziaka, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">A czwartemu dam kopniaka, faj duli, faj duli, faj.</span>
+<span class="verse-marker">Zwrotka 6</span>Z piątym pójdę do kawiarni, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">Z szóstym pójdę do sypialni, faj duli, faj duli, faj.</span>
+<span class="verse-marker">Zwrotka 7</span>Każda ładna Krakowianka, faj duli, faj duli, faj,
+<span class="repeat-block" data-count="2">Ma fartuszek, nie ma wianka, faj duli, faj duli, faj.</span>`
+  },
+  {
+    title: "Kukułeczka kuka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Kukułeczka kuka, chłopiec panny szuka,
+Spozira, przebira i nosa zadzira.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kuku, kuku, a-a, ha, a-a, ha.
+Łodiridi, łodiridi dyna, łodiridi dyna, uha!</span>
+<span class="verse-marker">Zwrotka 2</span>Chłopcy, moje chłopcy, w co wy to dufacie?
+Czy to w te surduty, co po jednym macie?
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kuku, kuku, a-a, ha, a-a, ha.
+Łodiridi, łodiridi dyna, łodiridi dyna, uha!</span>
+<span class="verse-marker">Zwrotka 3</span>Poznać ci to, poznać chłopca fanfarona,
+Choć pusto w kieszeni, głowa najiżona.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kuku, kuku, a-a, ha, a-a, ha.
+Łodiridi, łodiridi dyna, łodiridi dyna, uha!</span>
+<span class="verse-marker">Zwrotka 4</span>Kukułeczka kuka, serce we mnie puka,
+Głupi ten kawalir, co z majuntkiem szuka.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kuku, kuku, a-a, ha, a-a, ha.
+Łodiridi, łodiridi dyna, łodiridi dyna, uha!</span>
+<span class="verse-marker">Zwrotka 5</span>Pytajta kukulki, ona wam odpowie,
+Że ten najbogatszy, co ma dobrze w głowie.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kuku, kuku, a-a, ha, a-a, ha.
+Łodiridi, łodiridi dyna, łodiridi dyna, uha!</span>`
+  },
+  {
+    title: "Mannitou (Byli raz trzej wodzowie)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Byli raz trzej wodzowie, oni mieć wielkie zdrowie
+I ognista woda kochać, lubić, pić.
+Oni mieć wielki humor i bez przerwy robić rumor
+I z rozkoszy jak bawoły dzikie wyć.
+<span class="chorus-marker">Refren</span>My być tam, my być tu, wielki nasz Mannitou,
+Ty nam dać, dać ognista woda pić.
+My ją pić aż do rana, nasza woda ukochana,
+My ją pić, my ją pić a potem paść.
+<span class="verse-marker">Zwrotka 2</span>Wielki wódz Mała Kopa, on chcieć być kawał chłopa,
+On chcieć mieć zawsze dużo, dużo skwaw.
+On mieć w skalpie mało włosa, do ognistej wody nosa,
+On się w prerię swego życia rzucać wpław.
+<span class="chorus-marker">Refren</span>My być tam, my być tu, wielki nasz Mannitou,
+Ty nam dać, dać ognista woda pić.
+My ją pić aż do rana, nasza woda ukochana,
+My ją pić, my ją pić a potem paść.
+<span class="verse-marker">Zwrotka 3</span>Wielki wódz Inczu-czuna mieć nad głową wielka łuna,
+Taki wielki umysłowiec z niego być.
+On wciąż knuć, kombinować i bez przerwy lawirować
+I rozmyślać jakby sobie lekko żyć.
+<span class="chorus-marker">Refren</span>My być tam, my być tu, wielki nasz Mannitou,
+Ty nam dać, dać ognista woda pić.
+My ją pić aż do rana, nasza woda ukochana,
+My ją pić, my ją pić a potem paść.
+<span class="verse-marker">Zwrotka 4</span>Wielki wódz Złote Pióro, on chcieć być zawsze górą,
+On z mustanga, jak być młody, na skalp spaść.
+On wesołą mieć gęba i świergotać jak ta zięba,
+Gdy ognista woda ciurkiem w niego lać.
+<span class="chorus-marker">Refren</span>My być tam, my być tu, wielki nasz Mannitou,
+Ty nam dać, dać ognista woda pić.
+My ją pić aż do rana, nasza woda ukochana,
+My ją pić, my ją pić a potem paść.
+<span class="verse-marker">Zwrotka 5</span>Gdy na wodzów być posucha, przybyć do nich wódz Jaszucha,
+On bibuta na ognista woda być.
+On ją pić jak atrament i upijać się na amen,
+Potem jego mała skwaw go wielce łyć.
+<span class="chorus-marker">Refren</span>My być tam, my być tu, wielki nasz Mannitou,
+Ty nam dać, dać ognista woda pić.
+My ją pić aż do rana, nasza woda ukochana,
+My ją pić, my ją pić a potem paść.`
+  },
+  {
+    title: "Marianna",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Wczoraj obiecałaś mi na pewno, że zostaniesz mą królewną, królewną z mego snu,
+Wczoraj obiecałaś mi być wierną i w miłości swej niezmienną po długi życia kres.
+<span class="chorus-marker">Refren</span>O Maryjanno, gdybyś była zakochana, nie spałabyś w tę noc, w tę jedną noc.
+O Maryjanno, gdybyś była zakochana, nie spałabyś w tę noc, w tę jedną noc.
+<span class="verse-marker">Zwrotka 2</span>Dzisiaj, gdym do ciebie przyszedł z rana, by cię zbudzić, ukochana, z twego rannego snu,
+Dzisiaj nie zastałem ciebie w domu, bo uciekłaś po kryjomu z innym na rendez-vous.
+<span class="chorus-marker">Refren</span>O Maryjanno, gdybyś była zakochana, nie spałabyś w tę noc, w tę jedną noc.
+O Maryjanno, gdybyś była zakochana, nie spałabyś w tę noc, w tę jedną noc.
+<span class="verse-marker">Zwrotka 3</span>Teraz, gdy już wszystko diabli wzięli, gdy do wojska mnie zgarnęli, karabin dali mi,
+Teraz, mam już inną ukochaną, karabinem nazywaną, do serca tulę ją.
+<span class="chorus-marker">Refren</span>O Maryjanno, gdybyś była zakochana, nie spałabyś w tę noc, w tę jedną noc.
+O Maryjanno, gdybyś była zakochana, nie spałabyś w tę noc, w tę jedną no-o-oc.`
+  },
+  {
+    title: "Miała baba koguta",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Miała baba koguta, koguta, koguta, wsadziła go do buta, do buta: siedź!
+O, mój miły kogucie, kogucie, kogucie, kogucie, kogucie, kogucie,
+Jakże ci tam w tym bucie, w tym bucie, w tym bucie, w tym bucie jest?!
+<span class="verse-marker">Zwrotka 2</span>Miała baba indora, indora, indora, wsadziła go do wora, do wora: siedź!
+O, mój miły indorze ... w tym worze jest?!
+<span class="verse-marker">Zwrotka 3</span>Miała baba prosiaka, prosiaka, prosiaka, wsadziła go do saka, do saka: siedź!
+O, mój miły prosiaku ... w tym saku jest?!
+<span class="verse-marker">Zwrotka 4</span>Miała baba barana, barana, barana, wsadziła go do siana, do siana: siedź!
+O, mój miły baranie ... w tym sianie jest?!`
+  },
+  {
+    title: "My Cyganie",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>My, Cyganie, co pędzimy z wiatrem,
+My, Cyganie, znamy cały świat,
+My, Cyganie, wszystkim gramy,
+A śpiewamy sobie tak:
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Ore, ore, szaba, daba, da, amore,
+Ore, ore, szaba, daba, da,
+O murjaty, o szagrijaty,
+Hajda trojka na mienia.</span>
+<span class="verse-marker">Zwrotka 2</span>Kiedy tańczę, niebo tańczy razem ze mną,
+Kiedy gwiżdżę, gwiżdże ze mną wiatr,
+Zamknę oczy, liście więdną,
+Kiedy milknę, milczy świat.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Ore, ore, szaba, daba, da, amore,
+Ore, ore, szaba, daba, da,
+O murjaty, o szagrijaty,
+Hajda trojka na mienia.</span>
+<span class="verse-marker">Zwrotka 3</span>Będzie prościej, będzie prościej, będzie jaśniej,
+Całą radość damy wam,
+Będzie prościej, będzie jaśniej, gdy zaśpiewa każdy z nas!
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Ore, ore, szaba, daba, da, amore,
+Ore, ore, szaba, daba, da,
+O murjaty, o szagrijaty,
+Hajda trojka na mienia.</span>`
+  },
+  {
+    title: "Oj, dana, oj, dana",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Jedzie Arab, jedzie, wielbłąd pod nim hasa,
+Arab se ogląda swojego wielbłąda.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+Arab se ogląda swojego wielbłąda.</span>
+<span class="verse-marker">Zwrotka 2</span>Jedzie Arab, jedzie, w spodniach ma dwie dziury,
+A w tych dziurach widać to, co znoszą kury.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+A w tych dziurach widać to, co znoszą kury.</span>
+<span class="verse-marker">Zwrotka 3</span>Na wysokim dębie gruchały gołębie,
+A jeden nie gruchał, bo to był wewiórek.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+A jeden nie gruchał, bo to był wewiórek.</span>
+<span class="verse-marker">Zwrotka 4</span>Jadą goście, jadą koło mego sadu,
+Do mnie nie przyjadą, bo ja już tam nie mieszkam!
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+Do mnie nie przyjadą, bo ja już tam nie mieszkam!</span>
+<span class="verse-marker">Zwrotka 5</span>Szła teściowa lasem, pogryzły ją żmije,
+Żmije wyzdychały, a teściowa żyje!
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+Żmije wyzdychały, a teściowa żyje!</span>
+<span class="verse-marker">Zwrotka 6</span>Siedziała na dębie, dłubała se w gębie,
+A ludziska głupie myśleli, że w zębie.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+A ludziska głupie myśleli, że w zębie.</span>
+<span class="verse-marker">Zwrotka 7</span>Leciał pies przez owies, ogonem wywijał,
+Pewnie nie żonaty, wesoła bestyja!
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Oj, dana, oj, dana, oj, dana, oj, dana,
+Pewnie nie żonaty, wesoła bestyja!</span>`
+  },
+  {
+    title: "Panno Walerciu",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Panno Walerciu, czarną masz, panno Walerciu, czarną masz,
+Czarną masz wstążkę przy kapeluszu, panno Walerciu, czarną masz!
+<span class="chorus-marker">Refren</span>O bella, bella, bella Mari, bella Mari, bella Mari,
+O bella, bella, bella Mari, bella Mari i już!
+<span class="verse-marker">Zwrotka 2</span>Panno Walerciu, wsadzę ci, panno Walerciu, wsadzę ci,
+Wsadzę ci piórko do kapelusza, panno Walerciu, wsadzę ci!
+<span class="chorus-marker">Refren</span>O bella, bella, bella Mari, bella Mari, bella Mari,
+O bella, bella, bella Mari, bella Mari i już!
+<span class="verse-marker">Zwrotka 3</span>Panno Walerciu, ciasną masz, panno Walerciu, ciasną masz,
+Złotą obrączkę na swojej rączce, panno Walerciu, ciasną masz!
+<span class="chorus-marker">Refren</span>O bella, bella, bella Mari, bella Mari, bella Mari,
+O bella, bella, bella Mari, bella Mari i już!
+<span class="verse-marker">Zwrotka 4</span>Panno Walerciu, dajesz mi, panno Walerciu, dajesz mi,
+Całować ręce, ale nic więcej, panno Walerciu, dajesz mi!
+<span class="chorus-marker">Refren</span>O bella, bella, bella Mari, bella Mari, bella Mari,
+O bella, bella, bella Mari, bella Mari i już!
+<span class="verse-marker">Zwrotka 5</span>Panno Walerciu, rośnie ci, panno Walerciu, rośnie ci,
+Rośnie ci brzuszek od słodkich gruszek, panno Walerciu, rośnie ci!
+<span class="chorus-marker">Refren</span>O bella, bella, bella Mari, bella Mari, bella Mari,
+O bella, bella, bella Mari, bella Mari i już!
+<span class="verse-marker">Zwrotka 6</span>Panno Walerciu, kupię ci, panno Walerciu, kupię ci,
+Kupię ci fiata na stare lata, panno Walerciu, kupię ci!
+<span class="chorus-marker">Refren</span>O bella, bella, bella Mari, bella Mari, bella Mari,
+O bella, bella, bella Mari, bella Mari i już!`
+  },
+  {
+    title: "Pieniążki kto ma",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Pieniążki kto ma, ten jeździ autobusem,
+a kto pieniążków nie ma – za autobusem klusem.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 2</span>Pieniążki kto ma, ten jedzie do Krynicy,
+a kto pieniążków nie ma, ten głową do miednicy.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 3</span>Pieniążki kto ma, ten jedzie do Wieliczki,
+a kto pieniążków nie ma, ten palcem do solniczki.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 4</span>Pieniążki kto ma, ten lata samolotem,
+a kto pieniążków nie ma, ten chodzi na piechotę.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 5</span>Pieniążki kto ma, ten jedzie za granicę,
+a kto pieniążków nie ma, ten zwiedza okolicę.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 6</span>Pieniążki kto ma, ten jeździ na obozy,
+a kto pieniążków nie ma, ten w polu pasie kozy.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 7</span>Pieniążki kto ma, ten pójdzie dziś do kina,
+a kto pieniążków nie ma, ten stoi jak drabina.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 8</span>Pieniążki kto ma, ten jada czekoladę,
+a kto pieniążków nie ma, ten wcina marmoladę.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 9</span>Pieniążki kto ma, ten jada mandarynkę,
+a kto pieniążków nie ma, przełyka tylko ślinkę.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 10</span>Pieniążki kto ma, ten pije drogie wódki,
+a kto pieniążków nie ma, ten pije piwo z budki.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 11</span>Pieniążki kto ma, ten nosi garnitury,
+a kto pieniążków nie ma, ceruje w swetrze dziury.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 12</span>Pieniążki kto ma, ten kupi sobie fiata,
+a kto pieniążków nie ma, na konie strzela z bata.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat,
+bo człowiek bez pieniędzy jest więcej wart.</span>
+<span class="verse-marker">Zwrotka 13</span>Pieniążki kto ma, wiadomo, kto to taki,
+a kto pieniążków nie ma, to reszta – my biedaki.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">A nam wszystko jedno, my mamy cały świat, 
+bo człowiek bez pieniędzy jest więcej wart.</span>`
+  },
+  {
+    title: "Pij bracie, pij",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Pij, pij, pij, bracie, pij, na starość torba i kij.</span>
+<span class="repeat-block" data-count="2">Wczoraj grałeś w „sześćdziesiąt sześć", a dzisiaj nie masz co jeść.</span>
+<span class="verse-marker">Zwrotka 2</span>Pij, pij, pij, bracie mój, pij rano, wieczór i w noc.
+Pij, pij, trunkiem się truj, a głowa ciężka jak kloc.
+Smutki, troski odpędzi precz, marzeń rozsnuje się nić.
+Być albo nie być, Hamleta to rzecz, naszą dewizą jest pić!`
+  },
+  {
+    title: "Pije Kuba do Jakuba",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Pije Kuba do Jakuba, Jakub do Michała.
+Pijesz ty, piję ja, kompanija cała.
+<span class="repeat-block" data-count="2">A kto nie wypije, tego we dwa kije!
+Łupu cupu, łupu cupu, tego we dwa kije!</span>
+<span class="verse-marker">Zwrotka 2</span>Pili nasi pradziadowie, każdy wypił czarę.
+Jednak głowy nie tracili, bo pijali w miarę.
+<span class="repeat-block" data-count="2">Kto nad miarę pije, tego we dwa kije!
+Łupu cupu, łupu cupu, niech po polsku żyje!</span>
+<span class="verse-marker">Zwrotka 3</span>Pili nasi pradziadowie, nie byli pijacy.
+Byli mężni, pracowici, bądźmy i my tacy.
+<span class="repeat-block" data-count="2">A kto nie wypije, tego we dwa kije!
+Łupu cupu, łupu cupu, niech po polsku żyje!</span>`
+  },
+  {
+    title: "Przeleć mnie w tej koniczynie",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Teraz będzie numer jeden, a mnie jest na imię Edek.
+Przeleć mnie w tej koniczynie.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Przeleć mnie w tej koniczynie,
+Przeleć mnie w tej koniczynie jeszcze raz.</span>
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">Teraz będzie numer dwa, ona wciąż ochotę ma,
+Przeleć mnie w tej koniczynie.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Przeleć mnie w tej koniczynie,
+Przeleć mnie w tej koniczynie jeszcze raz.</span>
+<span class="verse-marker">Zwrotka 3</span><span class="repeat-block" data-count="2">Teraz będzie numer trzy, ona ciągle mówi mi:
+Przeleć mnie w tej koniczynie.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Przeleć mnie w tej koniczynie,
+Przeleć mnie w tej koniczynie jeszcze raz.</span>
+<span class="verse-marker">Zwrotka 4</span><span class="repeat-block" data-count="2">Teraz będzie numer cztery, wyciąg żeś to do cholery,
+Przeleć mnie w tej koniczynie.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Przeleć mnie w tej koniczynie,
+Przeleć mnie w tej koniczynie jeszcze raz.</span>
+<span class="verse-marker">Zwrotka 5</span><span class="repeat-block" data-count="2">Teraz będzie numer pięć, ona wciąż ma jeszcze chęć,
+Przeleć mnie w tej koniczynie.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Przeleć mnie w tej koniczynie,
+Przeleć mnie w tej koniczynie jeszcze raz.</span>
+<span class="verse-marker">Zwrotka 6</span><span class="repeat-block" data-count="2">Teraz będzie numer sześć, ona mówi: daj mi jeść.
+Przeleć mnie w tej koniczynie.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Przeleć mnie w tej koniczynie,
+Przeleć mnie w tej koniczynie jeszcze raz.</span>`
+  },
+  {
+    title: "Przepijemy naszej babci",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Przepijemy naszej babci domek cały, domek cały, domek mały,
+I kalosze, i bambosze, i sandały, jeszcze dziś, jeszcze dziś, jeszcze dziś!
+<span class="verse-marker">Zwrotka 2</span>Przepijemy naszej babci domek śliczny, domek śliczny, domek śliczny,
+I zrobimy z tego domku dom publiczny, jeszcze dziś, jeszcze dziś, jeszcze dziś!
+<span class="verse-marker">Zwrotka 3</span>Przepijemy naszej babci majty w kratę, majty w kratę, majty w kratę,
+Takie duże, barchanowe i włochate, jeszcze dziś, jeszcze dziś, jeszcze dziś!
+<span class="verse-marker">Zwrotka 4</span>Przepijemy naszej babci pieska, kotka, pieska, kotka, pieska, kotka,
+Pozostanie naszej babci tylko cnotka, jeszcze dziś, jeszcze dziś, jeszcze dziś!
+<span class="verse-marker">Zwrotka 5</span>Przepijemy naszej babci złote zęby, złote zęby, złote zęby,
+I zrobimy naszej babci dupę z gęby, jeszcze dziś, jeszcze dziś, jeszcze dziś!
+<span class="verse-marker">Zwrotka 6</span>Przepijemy naszej babci ślubne łoże, ślubne łoże, ślubne łoże,
+Po cóż babci, kiedy dziadek już nie może nic a nic, nic a nic, nic a nic!
+<span class="verse-marker">Zwrotka 7</span>Przepijemy naszej babci wszystko w domu, wszystko w domu, wszystko w domu,
+Przepijemy naszą babcię po kryjomu, jeszcze dziś, jeszcze dziś, jeszcze dziś!
+<span class="verse-marker">Zwrotka 8</span>Zabierzemy naszą babcię do Krakowa, do Krakowa, do Krakowa,
+Niech zobaczy świata kawał stara krowa, jeszcze dziś, jeszcze dziś, jeszcze dziś!`
+  },
+  {
+    title: "Przybyli ułani pod okienko",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Przybyli ułani pod okienko,</span>
+<span class="repeat-block" data-count="2">Stukają, wołają: „Puść, panienko!"</span>
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">Zaświecił miesiączek do okienka,</span>
+<span class="repeat-block" data-count="2">W koszulce stanęła w nim panienka.</span>
+<span class="verse-marker">Zwrotka 3</span><span class="repeat-block" data-count="2">O Boże, a cóż to za wojacy?</span>
+<span class="repeat-block" data-count="2">Otwieraj, nie bój się, to czwartacy!</span>
+<span class="verse-marker">Zwrotka 4</span><span class="repeat-block" data-count="2">Przyszliśmy napoić nasze konie,</span>
+<span class="repeat-block" data-count="2">Za nami piechoty całe błonie.</span>
+<span class="verse-marker">Zwrotka 5</span><span class="repeat-block" data-count="2">O Jezu, a dokąd Bóg prowadzi?</span>
+<span class="repeat-block" data-count="2">Warszawę odwiedzić byśmy radzi.</span>
+<span class="verse-marker">Zwrotka 6</span><span class="repeat-block" data-count="2">A potem pojedziem do Krakowa,</span>
+<span class="repeat-block" data-count="2">Popatrzeć, czy Polska już gotowa.</span>
+<span class="verse-marker">Zwrotka 7</span><span class="repeat-block" data-count="2">Na naszą niewolę jedna rada,</span>
+<span class="repeat-block" data-count="2">Wypędzić Prusaka, wygnać Szwaba.</span>
+<span class="verse-marker">Zwrotka 8</span><span class="repeat-block" data-count="2">I wspomną znów Grunwald te szubrawce,</span>
+<span class="repeat-block" data-count="2">Wybijem im Polskę raz na zawsze.</span>
+<span class="verse-marker">Zwrotka 9</span><span class="repeat-block" data-count="2">A wtedy powrócom pełni sławy,</span>
+<span class="repeat-block" data-count="2">Nad Wisłę, bez Niemców, do Warszawy.</span>
+<span class="verse-marker">Zwrotka 10</span><span class="repeat-block" data-count="2">Gąszczami, lasami, ścieżką polną,</span>
+<span class="repeat-block" data-count="2">Idziemy wywalczyć Polskę wolną.</span>
+<span class="verse-marker">Zwrotka 11</span><span class="repeat-block" data-count="2">Panienka otwierać podskoczyła,</span>
+<span class="repeat-block" data-count="2">Ułanów do środka zaprosiła.</span>`
+  },
+  {
+    title: "Płynie Wisła, płynie",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Płynie Wisła, płynie po polskiej krainie, po polskiej krainie,
+<span class="repeat-block" data-count="2">A dopóki płynie, Polska nie zaginie.</span>
+<span class="verse-marker">Zwrotka 2</span>Zobaczyła Kraków, wnet go pokochała, wnet go pokochała,
+<span class="repeat-block" data-count="2">A w dowód miłości wstęgą opasała.</span>
+<span class="verse-marker">Zwrotka 3</span>Chociaż się schowała w niepołomskie lasy, w niepołomskie lasy
+<span class="repeat-block" data-count="2">I do morza wpada, płynie jak przed czasy.</span>
+<span class="verse-marker">Zwrotka 4</span>Nad moją kolebką matka się schylała, matka się schylała
+<span class="repeat-block" data-count="2">I mówić pacierza wcześnie nauczała.</span>
+<span class="verse-marker">Zwrotka 5</span>„Ojcze nasz" i „Zdrowaś", i skład apostolski, i skład apostolski,
+<span class="repeat-block" data-count="2">Bym do samej śmierci kochał naród polski.</span>
+<span class="verse-marker">Zwrotka 6</span>Bo ten naród polski ma ten urok w sobie, ma ten urok w sobie,
+<span class="repeat-block" data-count="2">Kto go raz pokochał, nie zapomni w grobie.</span>`
+  },
+  {
+    title: "Rezerwa",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Godzina piąta minut trzydzieści, kiedy pobudka zagrała,
+<span class="repeat-block" data-count="2">Grupa rezerwy szła do cywila, niejedna panna płakała.</span>
+<span class="verse-marker">Zwrotka 2</span>Niejednej pannie żal się zrobiło i serce z bólu zadrżało,
+<span class="repeat-block" data-count="2">Że jej kochanek szedł do cywila, a jej się dziecko zostało.</span>
+<span class="verse-marker">Zwrotka 3</span>Tam na peronie, na dworcu głównym, wszystkie się panny zebrały,
+<span class="repeat-block" data-count="2">Z kamieniem w ręku, z dzieckiem na ręku, na rezerwistów czekały.</span>
+<span class="verse-marker">Zwrotka 4</span>Lecz to nie honor dla rezerwisty, by na peronie z panną stać,
+<span class="repeat-block" data-count="2">Wsiadł do pociągu i trzasnął drzwiami, tak się pożegnał z pannami.</span>
+<span class="verse-marker">Zwrotka 5</span>Wsiadł do pociągu i trzasnął drzwiami, i pociąg ruszył z łoskotem,
+<span class="repeat-block" data-count="2">A wszystkie panny głowy spuściły, poszły do domu z powrotem.</span>`
+  },
+  {
+    title: "Siadła pszczółka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Siadła pszczółka na jabłoni i otrzepuje kwiat,
+<span class="repeat-block" data-count="2">Czemuś mi, moja miła, zawiązała ten świat?</span>
+<span class="verse-marker">Zwrotka 2</span>Jam ci świata nie wiązała, zawiązał ci go ksiądz,
+<span class="repeat-block" data-count="2">Jam cię tylko pokochała, tyś mnie nie musiał wziąć.</span>
+<span class="verse-marker">Zwrotka 3</span>Jam się pięknie ubierała, pięknie stroiłam się,
+<span class="repeat-block" data-count="2">A tyś myślał, żem ja ładna i to uwiodło cię.</span>
+<span class="verse-marker">Zwrotka 4</span>Murarczyku, zamuruj mi moje czarne oczy,
+<span class="repeat-block" data-count="2">Żeby nigdy nie patrzały, we dnie ani w nocy.</span>`
+  },
+  {
+    title: "Siekiera, motyka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Siekiera, motyka, piłka, młotek, chodźże, Maryś, tu za płotek.
+Siekiera, motyka, piłka, gwóźdź, puść się ze mną, Maryś, puść.
+<span class="repeat-block" data-count="2">Używajmy, póki czas, bo za sto lat nie będzie nas.</span>
+<span class="verse-marker">Zwrotka 2</span>Siekiera, motyka, piłka, graca, niech pan głowy nie zawraca.
+Siekiera, motyka, piłka, kość, nie bądź pan natrętny gość.
+<span class="repeat-block" data-count="2">Co użyjem, to dla nas, wszak człowiek żyje tylko raz.</span>
+<span class="verse-marker">Zwrotka 3</span>Siekiera, motyka, piłka, kleszcze, chodźże, Maryś, zatańcz jeszcze.
+Siekiera, motyka, piłka, gwóźdź, chodźże, Maryś, chodźże już.
+<span class="repeat-block" data-count="2">Używajmy, póki czas, bo za sto lat nie będzie nas.</span>
+<span class="verse-marker">Zwrotka 4</span>Ja z tobą nie pójdę, boś ty cwany, wiem ja dobrze, co to ułany.
+Odstaw się ode mnie i idź spać, nie mnie na szabelkę brać!
+<span class="repeat-block" data-count="2">Co użyjem, to dla nas, wszak człowiek żyje tylko raz.</span>
+<span class="verse-marker">Zwrotka 5</span>Siekiera, motyka, piłka, pionek, rzuć ten fason, miej szaconek.
+Siekiera, motyka, piłka, klin, już niedługo będzie syn.
+<span class="repeat-block" data-count="2">Używajmy, póki czas, bo za sto lat nie będzie nas.</span>
+<span class="verse-marker">Zwrotka 6</span>Siekiera, motyka, piłka, dzbanek, tyś najdroższy mój kochanek.
+Siekiera, motyka, hop-sa-sa, do białego całkiem dnia.
+<span class="repeat-block" data-count="2">Co użyjem, to dla nas, wszak człowiek żyje tylko raz.</span>`
+  },
+  {
+    title: "Szalała, szalała",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Hej, szalała, szala-ła, hej, rybecka za wodom,
+<span class="repeat-block" data-count="2">Ale jo nie bede, ale jo nie bede, hej, chłopoku za to-bom.</span>
+<span class="verse-marker">Zwrotka 2</span>Hej, szalała, szala-ła, hej, bo jej sie pić chciało,
+<span class="repeat-block" data-count="2">Ale jo nie bede, ale jo nie bede, hej, bo chłopców niemało.</span>
+<span class="verse-marker">Zwrotka 3</span>Hej, szalała, szala-ła, hej, bo nie miała wody,
+<span class="repeat-block" data-count="2">Cornym łockiem mrugo, cornym łockiem mrugo, hej, do mnie chłopiec młody.</span>
+<span class="verse-marker">Zwrotka 4</span>Hej, z kamienia na kamień, hej, przeskakuje srocka,
+<span class="repeat-block" data-count="2">Tego chłopca kochom, tego chłopca kochom, hej, co mo corne łocka.</span>`
+  },
+  {
+    title: "W piwnicznej izbie",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>W piwnicznej izbie siedzę sam nad kuflem pełnym piwa,
+Oczyma wodzę tu i tam, a głowa mi się kiwa.
+<span class="repeat-block" data-count="2">Ja nie dbam o czerwony nos, ni o to, że wciąż tyję,
+Ja biorę kufel w ręce swe i piję, i piję, i piję! (Do dna!)</span>
+<span class="verse-marker">Zwrotka 2</span>A gdyby ktoś mi wybór dał: dziewczynę, konia, trunek,
+I rzekł: „wybieraj, co chcesz sam, ja płacę za rachunek",
+<span class="repeat-block" data-count="2">Na próżno dziewczynę wdzięczy się, a koń wyciąga szyję,
+Ja biorę kufel w ręce swe i piję, i piję, i piję! (Do dna!)</span>
+<span class="verse-marker">Zwrotka 3</span>A gdy nadejdzie sądu czas i stanę u stóp tronu,
+Pokłonię ja się panu w pas i rzeknę bez pardonu:
+<span class="repeat-block" data-count="2">Rozkoszy rajskich nie chcę znać, ni wiedzieć, gdzie się kryją,
+Lecz ty mnie, Panie Boże, wsadź, gdzie piją, gdzie piją, gdzie piją! (Do dna!)</span>`
+  },
+  {
+    title: "W siną dal",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Adela już zakłada suknię cienką,
+Na wiosnę kwiatki rosną i kwitnie miesiąc maj,
+Gdy spytasz ją dla kogo ta sukienka,
+Dla kochasia który odszedł w siną dal.
+<span class="chorus-marker">Refren</span>W siną dal w siną dal,
+To dla kochasia który odszedł w siną dal.
+<span class="verse-marker">Zwrotka 2</span>Czerwone ma podwiązki pod tą suknią,
+Na wiosnę kwiatki rosną i kwitnie miesiąc maj,
+Gdy spytasz ją dla kogo taki luksus,
+To dla kochasia który odszedł w siną dal.
+<span class="chorus-marker">Refren</span>W siną dal w siną dal,
+To dla kochasia który odszedł w siną dal.
+<span class="verse-marker">Zwrotka 3</span>U drzwi u drzwi jej tatuś czyści spluwę,
+Na wiosnę kwiatki rosną i kwitnie miesiąc maj,
+Gdy spytasz go na czyją to jest zgubę,
+To na kochasia który odszedł w siną dal.
+<span class="chorus-marker">Refren</span>W siną dal w siną dal,
+To dla kochasia który odszedł w siną dal.
+<span class="verse-marker">Zwrotka 4</span>Nad łóżkiem ślub stwierdzony rejentalnie,
+Na wiosnę kwiatki rosną i kwitnie miesiąc maj,
+Dla kogo to z kim żyjesz tak moralnie,
+Rzecz prosta że z kochasiem który w siną dal.
+<span class="chorus-marker">Refren</span>W siną dal w siną dal,
+To dla kochasia który odszedł w siną dal,
+W siną dal w siną dal,
+pomaszerował lewa, prawa w siną dal.`
+  },
+  {
+    title: "Wino, wino musi być!",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Wino, wino, wino musi być!</span>
+Jak nie ma wina, smutna dziewczyna,
+wino, wino, wino musi być!
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">Piwo, piwo, piwo musi być!</span>
+Jak nie ma piwa, głowa się kiwa,
+piwo, piwo, piwo musi być!
+<span class="verse-marker">Zwrotka 3</span><span class="repeat-block" data-count="2">Wódka, wódka, wódka musi być!</span>
+Jak nie ma wódki, to same smutki!
+Wódka, wódka, wódka musi być!
+<span class="verse-marker">Zwrotka 4</span><span class="repeat-block" data-count="2">Kawa, kawa, kawa musi być!</span>
+Jak nie ma kawy, nie ma zabawy!
+Kawa, kawa, kawa musi być!
+<span class="verse-marker">Zwrotka 5</span><span class="repeat-block" data-count="2">Para młoda, para musi być!</span>
+Jak nie ma pary, puste puchary!
+Para, para, para musi być!
+<span class="verse-marker">Zwrotka 6</span><span class="repeat-block" data-count="2">Siano, siano, siano musi być!</span>
+Jak nie ma siana, nie ma kochania!
+Siano, siano, siano musi być!
+<span class="verse-marker">Zwrotka 7</span><span class="repeat-block" data-count="2">Żona, żona, żona musi być!</span>
+Jak nie ma żony, człowiek szalony!
+Żona, żona, żona musi być!
+<span class="verse-marker">Zwrotka 8</span><span class="repeat-block" data-count="2">Synek, synek, synek musi być!</span>
+Jak nie ma synka, smutna rodzinka!
+Synek, synek, synek musi być!
+<span class="verse-marker">Zwrotka 9</span><span class="repeat-block" data-count="2">Córka, córka, córka musi być!</span>
+Jak nie ma córki, to do powtórki!
+Córka, córka, córka musi być!
+<span class="verse-marker">Zwrotka 10</span><span class="repeat-block" data-count="2">Dziecko, dziecko, dziecko musi być!</span>
+Jak nie ma dziecka, pomoc sąsiedzka!
+Pomoc, pomoc, pomoc musi być!`
+  },
+  {
+    title: "Wiła wianki (Tam nad Wisłą w dolinie)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Tam nad Wisłą w dolinie siedziała dziewczyna,
+Była piękna jak różany kwiat.</span>
+<span class="repeat-block" data-count="2">Kwiaty i róże zbierała ona.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Wiła wianki i rzucała je do falującej wody,
+Wiła wianki i rzucała je do wody.</span>
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">A gdy ona nad Wisłą tak wianki wiła,
+Przyszedł do niej żołnierzyk młody.</span>
+<span class="repeat-block" data-count="2">Miła, ach, miła, tak rzecze do niej.</span>
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Wiła wianki i rzucała je do falującej wody,
+Wiła wianki i rzucała je do wody.</span>`
+  },
+  {
+    title: "Wszystkie rybki",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Pytała się pani pewnego doktora:
+„Czy lepiej jest z rana, czy lepiej z wieczora?"
+„Z wieczora jest dobrze, by się smacznie spało,
+A z rana poprawić, by się pamiętało."
+<span class="chorus-marker">Refren</span>Wszystkie rybki śpią w jeziorze, ciuralla, ciuralla la,
+Tylko jedna spać nie może, ciuralla, ciuralla la.
+A ty, stary, nie kręć gitary, ciuralla, ciuralla la,
+Nie zawracaj kontra mary, ciuralla, ciuralla la.`
+  },
+  {
+    title: "Za górami, za lasami",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Za górami, za lasami, za dolinami,
+pobili się dwaj górale ciupagami.
+<span class="repeat-block" data-count="2">Hej, górale, nie bijta się!
+Ma góralka dwa warkocze, podzielita się!</span>
+<span class="verse-marker">Zwrotka 2</span>Żyli, byli trzej krasnale, nie górale,
+nie bili się, nie kłócili oni wcale.
+<span class="repeat-block" data-count="2">Trzech ich było, trzech z fasonem:
+dwóch wesołych, jeden smutny, bo miał żonę.</span>
+<span class="verse-marker">Zwrotka 3</span>A ta żona była jędza, no i basta,
+miała wałek, taki gruby jak do ciasta.
+<span class="repeat-block" data-count="2">I tym walkiem, kiedy chciała,
+swego męża - krasnoludka wałkowała.</span>
+<span class="verse-marker">Zwrotka 4</span>Już krasnalek taki chudy jak niteczka,
+taki wiotki, taki chudy jak karteczka.
+<span class="repeat-block" data-count="2">Żona ciągle uważała,
+że jest gruby, więc go dalej wałkowała.</span>
+<span class="verse-marker">Zwrotka 5</span>Już krasnalek zwałkowany w trumnie leży,
+że od walka zginął biedak, nikt nie wierzy.
+<span class="repeat-block" data-count="2">Gdy rodzinka w głos płakała,
+żona jędza jeszcze trumnę wałkowała.</span>`
+  },
+  {
+    title: "Zabrałaś serce moje",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Na morzu burza hula i wieje, wieje wiatr,
+Tęsknota mnie otula, tak bardzo mi cię brak.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Zabrałaś serce moje, zabrałaś moje sny,
+A mi pozostawiłaś te łzy, gorące łzy.</span>
+<span class="verse-marker">Zwrotka 2</span>Tak bardzo chciałbym dzisiaj całować usta twe,
+Lecz ty mnie już nie kochasz, innego chłopca chcesz.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Zabrałaś serce moje, zabrałaś moje sny,
+A mi pozostawiłaś te łzy, gorące łzy.</span>
+<span class="verse-marker">Zwrotka 3</span>Tak bardzo chcę być z tobą, pamiętam tamte dni,
+I każde twoje słowo, w mych snach przychodzisz ty.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Zabrałaś serce moje, zabrałaś moje sny,
+A mi pozostawiłaś te łzy, gorące łzy.</span>
+<span class="verse-marker">Zwrotka 4</span>Gorąca lampa marzeń wypala się do dna,
+A ja tak sobie marzę, la, la, la, la, la, la.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Zabrałaś serce moje, zabrałaś moje sny,
+A mi pozostawiłaś te łzy, gorące łzy.</span>`
+  },
+  {
+    title: "Zagraj mi piękny Cyganie (Cygańska skarga)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Zagraj mi piękny Cyganie, zagraj piosenkę sprzed lat,
+<span class="repeat-block" data-count="2">Zagraj mi pieśń o miłości, może ostatni już raz.</span>
+<span class="verse-marker">Zwrotka 2</span>Zły los nas kiedyś rozdzielił i będziesz daleko ty,
+<span class="repeat-block" data-count="2">Po szczęściu, które przeżyłem, zostały mi tylko łzy.</span>
+<span class="verse-marker">Zwrotka 3</span>Pójdę ja w szeroki świat, bo mam już dwadzieścia lat,
+<span class="repeat-block" data-count="2">Znajdę ja sobie dziewczynę, która mi serce swe da.</span>
+<span class="verse-marker">Zwrotka 4</span>Odda mi serce i duszę, odda mi wszystko, co ma,
+<span class="repeat-block" data-count="2">Da mi na drogę całusa, znów pójdę w szeroki świat.</span>
+<span class="verse-marker">Zwrotka 5</span>Żegnajcie góry, doliny, gdzie cytrusowy jest gaj,
+<span class="repeat-block" data-count="2">Żegnaj, ach żegnaj kochana, ja pójdę w nieznaną dal.</span>
+<span class="verse-marker">Zwrotka 6</span>Jeśli nie zginę i wrócę, rzucę karabin i nóż,
+<span class="repeat-block" data-count="2">Wrócę do ciebie jedyna i ucałuję cię znów.</span>
+<span class="verse-marker">Zwrotka 7</span>Cygan z wojenki powrócił, Cyganki nie zastał już,
+<span class="repeat-block" data-count="2">Inny jej w głowie zawrócił, innego kochała już.</span>`
+  },
+  {
+    title: "A kto się w styczniu urodził",
+    lyrics: `A kto się w styczniu urodził – powstań, powstań, powstań,
+Kieliszek swój do ręki weź i za swe zdrowie wypij też
+Do dna, do dna, do dna, do dna, do dna, do dna.
+Jak żeś wypił, to se nalej i butelkę podaj dalej,
+Jak żeś wypił, to se nalej i butelkę podaj dalej.
+
+A kto się w lutym urodził ...
+A kto się w marcu urodził ...
+A kto się w kwietniu urodził ...
+A kto się w maju urodził ...
+A kto się w czerwcu urodził ...
+A kto się w lipcu urodził ...
+A kto się w sierpniu urodził ...
+A kto się we wrześniu urodził ...
+A kto się w październiku urodził ...
+A kto się w listopadzie urodził ...
+A kto się w grudniu urodził ...
+A kto się wcale nie urodził ...`
+  },
+  {
+    title: "Ballada o jednej Wiśniewskiej",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Żyli w pałacu hrabia z hrabiną,
+On zwał się Rodryk, ona Franceska,
+A w drugim domu za ich meliną
+Mieszkała sobie jedna Wiśniewska.
+<span class="verse-marker">Zwrotka 2</span>Niewinne serce miała hrabina
+I takąż duszę pieską, niebieską,
+A on był gałgan i straszna świnia
+I pitigirill się z tą Wiśniewską.
+<span class="verse-marker">Zwrotka 3</span>Biedna hrabina łzami płakała,
+Z ciągłej żałości wyschła na deskę
+I na kolanach męża błagała –
+Odczep się, draniu, od tej Wiśniewskiej.
+<span class="verse-marker">Zwrotka 4</span>Próżno chodziła z hrabią na udry,
+Na próżno klęła swą dolę pieską,
+On ciągle ganął do tej łachudry
+I szeptał czule, o ty, Wiśniewsko!
+<span class="verse-marker">Zwrotka 5</span>Aż raz hrabina miecz zdjęła z ściany –
+Zmierzyła hrabię okiem królewskim –
+Siedź tu, powiada, ty w herb drapany,
+Dzisiaj nie pójdziesz do tej Wiśniewskiej.
+<span class="verse-marker">Zwrotka 6</span>On zaś będący pod alkoholem,
+Czyli – jak mówią – zalany w pestkę,
+Wyrżnął hrabinę łbem w antresolę
+I dawaj gazu do tej Wiśniewskiej.
+<span class="verse-marker">Zwrotka 7</span>Biedna hrabina padła na dywan,
+Cała zalała się krwią niebieską,
+A gdy już czuła, że dogorywa,
+Rzekła – poczekaj, o ty, Wiśniewsko!
+<span class="verse-marker">Zwrotka 8</span>Potem się odbył pogrzeb wspaniały,
+Hrabia nad grobem poronił łezkę,
+Strasznie się martwił przez dzionek cały,
+A na noc poszedł do tej Wiśniewskiej.
+<span class="verse-marker">Zwrotka 9</span>Wtedy hrabina z mogiły wstała,
+Wyrwała z trumny sękatą deskę,
+Poszła za hrabią, na śmierć go sprała
+I rozwaliła łeb tej Wiśniewskiej.
+<span class="verse-marker">Zwrotka 10</span>Chociaż lebiegi grzeszyli tyle
+I na nich w końcu też przyszła kreska,
+Dziś leżą sobie w jednej mogile:
+Hrabia, hrabina i ta Wiśniewska.`
+  },
+  {
+    title: "Bando, bando",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Precz smutki niech zginą, wspomnienia niechaj płyną,
+Obsiądźmy stoły w koło z piosenką wesołą!
+Uśmiechnij się jasno, a wszystkie troski zgasną,
+Podajmy sobie ręce w piosence, w piosence.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Bo w naszej ferajnie przyjęte jest bawić się fajnie i śpiewać też.
+I zawsze mamy chęć na szał, byleby śpiew wesoło brzmiał.
+
+Bando, bando, rozstania nadszedł już czas,
+Bando, bando, na zawsze złączyłeś nas.
+Bando, bando, bez ciebie smutno i źle,
+Pożegnanie to nie dla nas, wkrótce znów spotkamy się.</span>`
+  },
+  {
+    title: "Biały miś",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Biały miś dla dziewczyny,
+Którą kocham i kochać będę wciąż.
+Lecz dziewczyna jest już z innym,
+I pozostał mi po niej biały miś.
+<span class="chorus-marker">Refren</span>Hej, dziewczyno, o-o, spójrz na misia, a-a,
+On przypomni, przypomni chłopca ci,
+Nieszczęśliwego, o-o, białego misia, a-a,
+Który w oczach ma tylko szare łzy.
+<span class="verse-marker">Zwrotka 2</span>Tyle dziewcząt jest na świecie,
+A ja właśnie kocham jedną z nich.
+Tą dziewczyną wymarzoną,
+Tą dziewczyną wymarzoną jesteś ty.
+<span class="chorus-marker">Refren</span>Hej, dziewczyno, o-o, spójrz na misia, a-a,
+On przypomni, przypomni chłopca ci,
+Nieszczęśliwego, o-o, białego misia, a-a,
+Który w oczach ma tylko szare łzy.
+<span class="verse-marker">Zwrotka 3</span>Płynie czas jak ta rzeka
+I nie wrócą, nie wrócą tamte dni.
+W moim sercu jest dziś rana,
+Którą zatrzeć możesz tylko ty.
+<span class="chorus-marker">Refren</span>Hej, dziewczyno, o-o, spójrz na misia, a-a,
+On przypomni, przypomni chłopca ci,
+Nieszczęśliwego, o-o, białego misia, a-a,
+Który w oczach ma tylko szare łzy.`
+  },
+  {
+    title: "Chachary",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Starzy ludzie powiadali, że chachary wyzdychali,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 2</span>Jedna baba drugiej babie wsadziła go do oka grabie,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 3</span>Polska margaryna mleczna przeciw ciąży jest skuteczna,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 4</span>Moja ciocia z Ciechocinka robi siusiu co godzinka,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 5</span>Co godzinka, co momencik, bo ma stary instrumencik,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 6</span>Każdy rolnik postępowy sam zapładnia swoje krowy,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 7</span>Każda krowa postępowa rolnikowi dać gotowa,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.
+<span class="verse-marker">Zwrotka 8</span>Nie ma Rusa, nie ma Czecha, mamy prezydenta Lecha,
+<span class="chorus-marker">Refren</span>A chachary żyją i gorzałkę piją, z góry spoglądają, wszystkich w nosie mają.`
+  },
+  {
+    title: "Cipuleńka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Na gondoli, na gondoli jakaś para się całuje,
+Letni wietrzyk łodzią buja, ona trzyma go za ramię i tak płyną sobie w dal.
+Cipu-, cipu-, cipuleńka, cipu-, cipu-, cipudaj.
+Letni wietrzyk łodzią buja, ona trzyma go za ramię i tak płyną sobie w dal.
+<span class="verse-marker">Zwrotka 2</span>Nad gondolą, nad gondolą jakieś ptaszki się całują,
+Letni wietrzyk łodzią buja, ona trzyma go za skrzydło i tak płyną sobie w dal.
+Cipu-, cipu-, cipuleńka, cipu-, cipu-, cipudaj.
+Letni wietrzyk łodzią buja, ona trzyma go za skrzydło i tak płyną sobie w dal.
+<span class="verse-marker">Zwrotka 3</span>Pod gondolą, pod gondolą jakieś rybki się całują,
+Letni wietrzyk łodzią buja, ona trzyma go za płetwę i tak płyną sobie w dal.
+Cipu-, cipu-, cipuleńka, cipu-, cipu-, cipudaj.
+Letni wietrzyk łodzią buja, ona trzyma go za płetwę i tak płyną sobie w dal.
+<span class="verse-marker">Zwrotka 4</span>Sam gondolier rusza sterem, też był kiedyś kawalerem,
+I choć lat minęła kupa, nie zapomniał, co to młodość i tak płyną sobie w dal.
+Cipu-, cipu-, cipuleńka, cipu-, cipu-, cipudaj.
+I choć lat minęła kupa, nie zapomniał, co to młodość i tak płyną sobie w dal.
+<span class="verse-marker">Zwrotka 5</span>Na rydwanie, na rydwanie wyśpiewują młode panie,
+Jedna pani ma dziś chrypę, bo ma przeziębione gardło i tak płyną sobie w dal.
+Cipu-, cipu-, cipuleńka, cipu-, cipu-, cipudaj.
+Jedna pani ma dziś chrypę, bo ma przeziębione gardło i tak płyną sobie w dal.`
+  },
+  {
+    title: "Czarne oczy (Gdybym miał gitarę)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Gdybym miał gitarę, to bym na niej grał,
+<span class="repeat-block" data-count="2">Opowiedziałbym o swej miłości, którą przeżyłem sam.</span>
+<span class="chorus-marker">Refren</span>A wszystko te czarne oczy, gdybym ja je miał,
+<span class="repeat-block" data-count="2">Za te czarne, cudne oczęta serce, duszę bym dał.</span>
+<span class="verse-marker">Zwrotka 2</span>Fajki ja nie palę, wódki nie piję,
+<span class="repeat-block" data-count="2">Ale z żalu, z żalu wielkiego ledwo co żyję.</span>
+<span class="chorus-marker">Refren</span>A wszystko te czarne oczy, gdybym ja je miał,
+<span class="repeat-block" data-count="2">Za te czarne, cudne oczęta serce, duszę bym dał.</span>
+<span class="verse-marker">Zwrotka 3</span>Ludzie mówią – głupi, po coś ty ją brał,
+<span class="repeat-block" data-count="2">Po coś to dziewczę czarne, figlarne mocno pokochał?</span>
+<span class="chorus-marker">Refren</span>A wszystko te czarne oczy, gdybym ja je miał,
+<span class="repeat-block" data-count="2">Za te czarne, cudne oczęta serce, duszę bym dał.</span>`
+  },
+  {
+    title: "Czarny chleb i czarna kawa",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Jedzie pociąg, złe wagony do więzienia wiozą mnie,
+Świat ma tylko cztery strony, a w tym świecie nie ma mnie.
+Gdy swe oczy otworzyłem, wielki żal ogarnął mnie,
+Po policzkach łzy spłynęły, zrozumiałem wtedy, że
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Czarny chleb i czarna kawa, opętani samotnością,
+Myślą swą szukają szczęścia, które zwie się wolnością.</span>
+<span class="verse-marker">Zwrotka 2</span>Zapach murów, widok krat, wietrze ponieś moją pieśń,
+Pieśń goryczy i rozpaczy, moja matko, jest mi źle.
+Młodsza siostra zapytała: „Mamo, gdzie braciszek mój?",
+„Brat twój w ciemnej celi siedzi, odsiaduje wyrok swój".
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Czarny chleb i czarna kawa, opętani samotnością,
+Myślą swą szukają szczęścia, które zwie się wolnością.</span>
+<span class="verse-marker">Zwrotka 3</span>Chciałem krzyczeć, lecz nie mogłem, chciałem śpiewać, brak mi tchu,
+Serce moje mi wydarli, serca mego nie ma już.
+Chciałem tylko mówić prawdę, lecz zamknięto usta mi,
+Chciałem komuś podać ręce, teraz ręce są we krwi.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Czarny chleb i czarna kawa, opętani samotnością,
+Myślą swą szukają szczęścia, które zwie się wolnością.</span>
+<span class="verse-marker">Zwrotka 4</span>Wtem do celi klawisz wpada i zaczyna więźnia bić,
+Młody więzień na twarz pada, serce mu przestaje bić.
+I nadejdzie chwila błoga, śmierć zabierze oddech mój,
+Moje ciało stąd wyniosą, a pod celą będą znów
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Czarny chleb i czarna kawa, opętani samotnością,
+Myślą swą szukają szczęścia, które zwie się wolnością.</span>`
+  },
+  {
+    title: "Czerwona jarzębina",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Czerwona jarzębina szumiała, gdy ujrzałam cię,
+Pod czerwoną jarzębiną stałeś ty obok mnie.
+<span class="chorus-marker">Refren</span>Jak czerwona, czerwona jarzębina, stałeś obok mnie,
+Pod czerwoną, czerwoną jarzębiną całowałam cię.
+<span class="verse-marker">Zwrotka 2</span>Pod czerwoną jarzębiną mile nam mijał czas,
+Jej zielone małe listki czule wciąż tuliły nas.
+<span class="chorus-marker">Refren</span>Jak czerwona, czerwona jarzębina, stałeś obok mnie,
+Pod czerwoną, czerwoną jarzębiną całowałam cię.
+<span class="verse-marker">Zwrotka 3</span>Aż jesień przekreśliła spędzone mile chwile te,
+Czerwona jarzębina zaczęła gubić listki swe.
+<span class="chorus-marker">Refren</span>Zapłakała czerwona jarzębina, przepraszając nas,
+Mówiąc, że kiedy przyjdzie wiosna, będzie tulić nas.
+<span class="verse-marker">Zwrotka 4</span>Wiosno, przyjdź, czekamy na ciebie.
+<span class="chorus-marker">Refren</span>Jak czerwona, czerwona jarzębina, stałeś obok mnie,
+Pod czerwoną, czerwoną jarzębiną całowałam cię.`
+  },
+  {
+    title: "Czerwone jabłuszko",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Czerwone jabłuszko przekrojone na krzyż,
+Czemu ty, dziewczyno, krzywo na mnie patrzysz?
+<span class="chorus-marker">Refren</span>Gęsi za wodą, kaczki za wodą, uciekaj dziewczyno bo cię pobodą.
+Ja ci buzi dam, ty mi buzi dasz, ja cię nie wydam, ty mnie nie wydasz.
+<span class="repeat-block" data-count="2">Mazurek, mazureczek, oberek, obereczek, kujawiak, kujawiaczek,
+Chodźże, Maryś, chodźże, chodź, chodź!</span>
+<span class="verse-marker">Zwrotka 2</span>Czerwone jabłuszko po ziemi się toczy,
+Tego chłopca kocham, co ma czarne oczy.
+<span class="chorus-marker">Refren</span>Gęsi za wodą, kaczki za wodą, uciekaj dziewczyno bo cię pobodą.
+Ja ci buzi dam, ty mi buzi dasz, ja cię nie wydam, ty mnie nie wydasz.
+<span class="repeat-block" data-count="2">Mazurek, mazureczek, oberek, obereczek, kujawiak, kujawiaczek,
+Chodźże, Maryś, chodźże, chodź, chodź!</span>
+<span class="verse-marker">Zwrotka 3</span>Żebym cię, Jasieńku, w wodzie zobaczyła,
+To bym ja za tobą do wody wskoczyła.
+<span class="chorus-marker">Refren</span>Gęsi za wodą, kaczki za wodą, uciekaj dziewczyno bo cię pobodą.
+Ja ci buzi dam, ty mi buzi dasz, ja cię nie wydam, ty mnie nie wydasz.
+<span class="repeat-block" data-count="2">Mazurek, mazureczek, oberek, obereczek, kujawiak, kujawiaczek,
+Chodźże, Maryś, chodźże, chodź, chodź!</span>
+<span class="verse-marker">Zwrotka 4</span>Tam gdzie woda czysta, tam koniki piją,
+Gdzie ładne dziewuchy, tam się chłopcy biją.
+<span class="chorus-marker">Refren</span>Gęsi za wodą, kaczki za wodą, uciekaj dziewczyno bo cię pobodą.
+Ja ci buzi dam, ty mi buzi dasz, ja cię nie wydam, ty mnie nie wydasz.
+<span class="repeat-block" data-count="2">Mazurek, mazureczek, oberek, obereczek, kujawiak, kujawiaczek,
+Chodźże, Maryś, chodźże, chodź, chodź!</span>
+<span class="verse-marker">Zwrotka 5</span>Nie bijta się chłopcy, do Boga świętego,
+Nie wyjdę za wszystkich, tylko za jednego.
+<span class="chorus-marker">Refren</span>Gęsi za wodą, kaczki za wodą, uciekaj dziewczyno bo cię pobodą.
+Ja ci buzi dam, ty mi buzi dasz, ja cię nie wydam, ty mnie nie wydasz.
+<span class="repeat-block" data-count="2">Mazurek, mazureczek, oberek, obereczek, kujawiak, kujawiaczek,
+Chodźże, Maryś, chodźże, chodź, chodź!</span>`
+  },
+  {
+    title: "Cyganeczka Zosia",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Znałem Cyganeczkę Zosię, kazali mi ją poślubić,
+<span class="repeat-block" data-count="2">Lecz me serce nie pozwala mojej Cyganecki lubić.</span>
+<span class="verse-marker">Zwrotka 2</span>Na podwórzu, na podwórzu cztery kare konie stoją,
+<span class="repeat-block" data-count="2">Lecz ty, śliczna Cyganeczko, nigdy już nie będziesz moją.</span>
+<span class="verse-marker">Zwrotka 3</span>A jak mi się znudzi wreszcie, kupię sobie konia w mieście,
+<span class="repeat-block" data-count="2">Kupię konia i aksamit, i pojadę z Cyganami!</span>
+<span class="verse-marker">Zwrotka 4</span>Jadę po Polsce z taborami, koniom grzywy wiatr rozwiewa,
+<span class="repeat-block" data-count="2">A ja jadę z Cyganami i o Cyganeczce śpiewam!</span>`
+  },
+  {
+    title: "Czerwone jagody",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Czerwone jagody wpadają do wody,
+Powiadają ludzie, że nie mam urody.
+<span class="repeat-block" data-count="2">Urodo, urodo, gdybym ja cię miała,
+Dostałabym chłopca, jakiego bym chciała.</span>
+<span class="verse-marker">Zwrotka 2</span>Choć urody nie mam, o to się nie troszczę,
+Innym urodziwym wcale nie zazdroszczę.
+<span class="repeat-block" data-count="2">Bo ta urodziwa nie jest pracowita,
+Czy to gospodyni, panna, czy kobieta.</span>
+<span class="verse-marker">Zwrotka 3</span>Raz mi matuś rzekła: „Córuś, moja droga,
+Przecież masz majątek, na co ci uroda."
+<span class="repeat-block" data-count="2">Inne bez majątku, lecz mają urodę,
+Tam się chłopcy schodzą, jak w las po jagodę.</span>`
+  },
+  {
+    title: "Cztery razy po dwa razy",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Czy normalna, zdrowa ryba
+Może zgwałcić wieloryba?
+Ależ owszem, czemu nie,
+Rybce też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 2</span>Czy normalna, zwykła ciocia
+Może dawać tak jak kocia?
+Ależ owszem, czemu nie,
+Cioci też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 3</span>Czy normalny podchorąży
+Może być przyczyną ciąży?
+Ależ owszem, czemu nie,
+Jemu też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 4</span>Czy normalny facet z bródką
+Może zostać prostytutką?
+Ależ owszem, czemu nie,
+Jemu też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 5</span>Czy normalny, zdrowy byk
+Może z krówką cyk, cyk, cyk?
+Ależ owszem, czemu nie,
+Jemu też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 6</span>Czy normalnej Sopociance
+Można zrobić dziecko w bańce?
+Ależ owszem, czemu nie,
+I jej też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 7</span>Czy normalnej, zdrowej pannie
+Można zrobić dziecko w wannie?
+Ależ owszem, czemu nie,
+Pannie też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 8</span>Czy normalny facet z wąsem
+Może zostać dziś alfonsem?
+Ależ owszem, czemu nie,
+Jemu też należy się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.
+<span class="verse-marker">Zwrotka 9</span>Czy normalny, zdrowy student
+Może raz w tygodniu z trudem?
+Ależ owszem, czemu nie,
+On w stołówce żywi się.
+<span class="chorus-marker">Refren</span>Cztery razy po dwa razy,
+Osiem razy raz po raz,
+O północy ze dwa razy
+I nad ranem jeszcze raz.`
+  },
+  {
+    title: "Dalej, wesoło",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Dalej, wesoło, niech popłynie gromki śpiew,
+Niech stutysięcznym echem zagrzmi pośród drzew,
+Niech spędzi z czoła wszelki smutek, wszelki cień, wszak słoneczny mamy dzień!
+<span class="chorus-marker">Refren</span>Glory, glory, alleluja, glory, glory, alleluja,
+Glory, glory, allelu-ja, chcemy słońca, chcemy żyć!
+<span class="verse-marker">Zwrotka 2</span>Harce, wycieczki, obozowych przeżyć moc,
+Piosnki gorące, mknące jak kamyki z proc.
+Serca złączone bratních uczuć nudną grą, pozdrowienia ku nam ślą!
+<span class="chorus-marker">Refren</span>Glory, glory, alleluja, glory, glory, alleluja,
+Glory, glory, allelu-ja, chcemy słońca, chcemy żyć!
+<span class="verse-marker">Zwrotka 3</span>Razem harcerze maszerują raz, dwa, trzy,
+Prężne ich stopy w marszu krzeszą lotne skry,
+Idziem zdobywać zbrojni, w oczach blask i stal, lśniącą słońcem światów dal.
+<span class="chorus-marker">Refren</span>Glory, glory, alleluja, glory, glory, alleluja,
+Glory, glory, allelu-ja, chcemy słońca, chcemy żyć!`
+  },
+  {
+    title: "Dziura w desce (Kasia)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Wysokie płoty tato grodził,
+Wysokie płoty tato grodził,
+<span class="repeat-block" data-count="2">Żeby do Kasi do Kasi żeby,
+Żeby do Kasi nikt nie chodził.</span>
+<span class="verse-marker">Zwrotka 2</span>Ale ta Kasia mądra była,
+Ale ta Kasia mądra była,
+<span class="repeat-block" data-count="2">I dziurę w płocie, i w płocie dziurę,
+I dziurę w płocie wywierciła.</span>
+<span class="verse-marker">Zwrotka 3</span>Oj żeby nie ta dziura w desce,
+Oj żeby nie ta dziura w desce,
+<span class="repeat-block" data-count="2">Byłaby Kasia, Kasia by była,
+Byłaby Kasia panną jeszcze.</span>
+<span class="verse-marker">Zwrotka 4</span>Tęgich ślusarzy tato wzywał,
+Tęgich ślusarzy tato wzywał,
+<span class="repeat-block" data-count="2">Żeby u Kasi, u Kasi żeby,
+Żeby u Kasi nikt nie bywał.</span>
+<span class="verse-marker">Zwrotka 5</span>Ale ta Kasia sprytna była,
+Ale ta Kasia sprytna była,
+<span class="repeat-block" data-count="2">I zaraz kluczyk, i kluczyk zaraz,
+I zaraz kluczyk dorobiła.</span>
+<span class="verse-marker">Zwrotka 6</span>Oj chyba przez ten mały kluczyk,
+Oj chyba przez ten mały kluczyk,
+<span class="repeat-block" data-count="2">Chodziła Kasia, Kasia chodziła,
+Chodziła Kasia w wianku krócej.</span>`
+  },
+  {
+    title: "Felek Zdankiewicz",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Felek Zdankiewicz był chłopak morowy,
+przyjechał na urlop sześciotygodniowy.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 2</span>Urlop się kończy, czas do wojska wrócić,
+ale Felusiowi żal koleżków rzucić.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 3</span>Nie tak koleżków, jak swojej kochanki,
+u której przebywał wieczory i ranki.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 4</span>Wreszcie go schwytali grudnia trzynastego
+i go zawieźli do biura śledczego.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 5</span>A z biura śledczego wypuścić nie chcieli,
+Felka Zdankiewicza pod kluczyk zamknęli.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 6</span>Lecz Feluś nie gapa, już nóż otwiera,
+przebił Czajkowskiego, na Fuksa naciera.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 7</span>Ledwie wyskoczył za bramę ratusza,
+wsiada do dorożki, na Warszawę rusza.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 8</span>A w tej dorożce miał czasu troszkę,
+więc kazał się zawieźć aż na Czerniakowskie.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 9</span>A z Czerniakowskiej do domu swego,
+żeby opowiedzieć Mańce coś nowego. Ojra,
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 10</span>Połóż się Feluś, boś ty jest pijany,
+połóż się Feluś, boś ty nie wyspany.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 11</span>Kładzie się Feluś do snu kamiennego,
+a kochanka jego do biura śledczego.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 12</span>Panowie agenci, prędko pospieszajcie,
+Felka Zdankiewicza na łóżku schwytajcie.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 13</span>Panowie agenci prędko pospieszyli,
+Felka Zdankiewicza podczas snu nakryli.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 14</span>Jedzie kibitka wąską ulicą,
+a koledzy jemu szczęścia, zdrowia życzą.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 15</span>Ach, wy koledzy, czyż wy nie żyjecie,
+czy wy mojej Mańce życie darujecie?
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 16</span>Nie matrw się Feluś, my jeszcze żyjemy
+i tą twoją Mankę smykiem posuniemy.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.
+<span class="verse-marker">Zwrotka 17</span>Młoda Felusiowa już w grobie spoczywa,
+a my na to konto kropniem sobie piwa.
+<span class="chorus-marker">Refren</span>Ojra, tarira, ojra, tarira, ojra, tarira, raz, dwa, trzy.`
+  },
+  {
+    title: "Góralu, czy ci nie żal?",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Góralu, czy ci nie żal odchodzić od stron ojczystych,
+Świerkowych lasów i hal, i tych potoków srebrzystych?
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 2</span>A góral na góry spoziera i łzy rękawem ociera,
+I góry porzucić trzeba dla chleba, panie, dla chleba.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 3</span>Góralu, wróć się do hal, w chatach zostali ojcowie.
+Gdy pójdziesz od nich hen, w dal, cóż z nimi będzie, ach, kto wie?
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 4</span>A góral jak dziecko płacze: „Może już ich nie zobaczę.
+I starych porzucić trzeba dla chleba, panie, dla chleba".
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 5</span>Góralu, nie odchodź, nie, na wzgórku u Męki Boskiej,
+Tam matka twa płacze cię, uschnie z tęsknoty i troski.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 6</span>On zwiesił głowę i wzdycha: „Oj, dołoż moja!" – rzekł z cicha,
+I matkę porzucić trzeba dla chleba, panie, dla chleba.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 7</span>I poszedł z grabkami, z kosą, w gurcie starganej szedł boso.
+I poszedł z gór swoich w dal, góralu, żal mi cię, żal!
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>
+<span class="verse-marker">Zwrotka 8</span>Lecz zanim liść opadł z drzew, powraca góral do chaty,
+Na ustach wesoły śpiew, trzos w rękach niesie bogaty.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Góralu, czy ci nie żal? Góralu, wracaj do hal!</span>`
+  },
+  {
+    title: "Granica",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>O tobie, miła, ciągle marzę, o tobie, miła, ciągle śnię,
+Chciałbym całować usta twoje i czule szeptać: „kocham cię".
+Lecz wielka dzieli nas granica, boś ty bogatą przecież jest,
+Ja jestem tylko zwykłym grajkiem i jest mi w życiu bardzo źle.
+<span class="verse-marker">Zwrotka 2</span>A gdybym ja był czarodziejem, dał bym ci, miła, cały świat,
+Lecz nim je jestem, moja miła, odchodzę hen w daleki świat.
+Bo wielka dzieli nas granica, boś ty bogatą przecież jest,
+Ja jestem tylko zwykłym grajkiem i jest mi w życiu bardzo źle.
+<span class="verse-marker">Zwrotka 3</span>Na niebie gwiazdka mówi mi, jak bardzo, bardzo chciałabyś
+Jedną gwiazdeczkę z nieba mieć, lecz nierealne to dziś jest.
+Bo wielka dzieli nas granica, boś ty bogatą przecież jest,
+Ja jestem tylko zwykłym grajkiem i jest mi w życiu bardzo źle.`
+  },
+  {
+    title: "Gdzie strumyk płynie z wolna",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Gdzie strumyk płynie z wolna, rozsiewea zioła maj,
+Stokrotka rosła polna, a nad nią szumiał gaj.
+Stokrotka rosła polna, a nad nią szumiał gaj, zielony gaj.
+<span class="verse-marker">Zwrotka 2</span>W tym gaju tak ponuro, że aż przeraża mnie,
+<span class="repeat-block" data-count="2">Ptaszęta za wysoko, a mnie samotnej źle.</span>
+<span class="verse-marker">Zwrotka 3</span>Wtem harcerz idzie z wolna, stokrotko, witam cię!
+<span class="repeat-block" data-count="2">Twój urok mnie zachwyca! Czy chcesz być mą, czy nie?</span>
+<span class="verse-marker">Zwrotka 4</span>Ma miłość jest głęboka, głęboko w sercu skryta,
+<span class="repeat-block" data-count="2">I nikt jej nie odgadnie, i nikt jej nie odczyta.</span>
+<span class="verse-marker">Zwrotka 5</span>Gdzie strumyk płynie z wolna, rozsiewea zioła maj,
+<span class="repeat-block" data-count="2">Stokrotka znikła polna, z harcerzem poszła w dal.</span>
+<span class="verse-marker">Zwrotka 6</span>Więc idą, idą, idą, aż zaszli w ciemny las,
+<span class="repeat-block" data-count="2">A harcerz taki gapa, że aż w pokrzywy wlazł.</span>
+<span class="verse-marker">Zwrotka 7</span>A ona, ona, ona, cóż biedna robić ma?
+<span class="repeat-block" data-count="2">Nad gapą pochylona i śmieje się: cha, cha.</span>`
+  },
+  {
+    title: "Gorzałka zawsze dobra jest",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span><span class="repeat-block" data-count="2">Gorzałka zawsze dobra jest,</span>
+<span class="repeat-block" data-count="2">Bo ją piją gospodarze i sprzedają za nią zboże.
+Gorzałka zawsze dobra jest.</span>
+<span class="verse-marker">Zwrotka 2</span><span class="repeat-block" data-count="2">Gorzałka zawsze dobra jest,</span>
+<span class="repeat-block" data-count="2">Bo ją pije stara babka, jak wypije, hop, do dziadka.
+Gorzałka zawsze dobra jest.</span>
+<span class="verse-marker">Zwrotka 3</span><span class="repeat-block" data-count="2">Gorzałka zawsze dobra jest,</span>
+<span class="repeat-block" data-count="2">Bo chłopaki ją pijają, jak popijają, to kochają.
+Gorzałka zawsze dobra jest.</span>
+<span class="verse-marker">Zwrotka 4</span><span class="repeat-block" data-count="2">Gorzałka zawsze dobra jest,</span>
+<span class="repeat-block" data-count="2">Bo ją piją też artyści, bo gorzałka gardła czyści.
+Gorzałka zawsze dobra jest.</span>
+<span class="verse-marker">Zwrotka 5</span><span class="repeat-block" data-count="2">Gorzałka zawsze dobra jest,</span>
+<span class="repeat-block" data-count="2">Bo my także ją pijamy, jak popijem, lepiej gramy.
+Gorzałka zawsze dobra jest.</span>`
+  },
+  {
+    title: "Szła dzieweczka do laseczka",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Szła dzieweczka do laseczka, do zielonego, do zielonego, do zielonego.
+Napotkała myśliweczka bardzo szwarnego, bardzo szwarnego, bardzo szwarnego.
+<span class="chorus-marker">Refren</span>Gdzie jest ta ulica, gdzie jest ten dom, gdzie jest ta dziewczyna, co kocham ją?
+Znalazłem ulicę, znalazłem dom, znalazłem dziewczynę, co kocham ją.
+<span class="verse-marker">Zwrotka 1</span>Myśliweczku, kochaneczku, bardzom ci rada, bardzom ci rada.
+Dałabym ci chleba z masłem, alem go zjadła, alem go zjadła, alem go zjadła.
+<span class="chorus-marker">Refren</span>Gdzie jest ta ulica, gdzie jest ten dom, gdzie jest ta dziewczyna, co kocham ją?
+Znalazłem ulicę, znalazłem dom, znalazłem dziewczynę, co kocham ją.
+<span class="verse-marker">Zwrotka 1</span>Jakżeś zjadła, to ześ zjadła, to mi się nie chwal, to mi się nie chwal, to mi się nie chwal.
+Bo jakbym cię w lesie spotkał, to bym cię zeprał, to bym cię zeprał, to bym cię zeprał.
+<span class="chorus-marker">Refren</span>Gdzie jest ta ulica, gdzie jest ten dom, gdzie jest ta dziewczyna, co kocham ją?
+Znalazłem ulicę, znalazłem dom, znalazłem dziewczynę, co kocham ją.`
+  },
+  {
+    title: "Taka mała",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Taka mała, a przysłoniła mi blaski i cienie ulicznych gwiazd,
+Taka mała, a pokochałem ją: usta i włosy, oczy i nos.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kochałem ją, a ona mnie, lubiłem ją, a ona mnie,
+byłem szczęśliwy jakby we śnie.</span>
+<span class="verse-marker">Zwrotka 2</span>Pewnego razu, gdy szliśmy bulwarem, powiedziała mi, że już nie kocha mnie.
+Nie wiem, dlaczego tak postąpiła, nie wiem, dlaczego tak uczyniła.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kochałem ją, a ona mnie, lubiłem ją, a ona mnie,
+byłem szczęśliwy jakby we śnie.</span>
+<span class="verse-marker">Zwrotka 3</span>Po kilku latach znów powróciła, z całego serca mnie przeprosiła.
+Nie wiem, dlaczego tak postąpiła, nie wiem, dlaczego tak uczyniła.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Kochałem ją, a ona mnie, lubiłem ją, a ona mnie,
+byłem szczęśliwy jakby we śnie.</span>`
+  },
+  {
+    title: "Tańcuj, tańcuj (Piwko)",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Tańcuj, tańcuj, okręcaj, okręcaj, ino pieca nie trącaj, nie trącaj,
+Dobry piec jest na zimę, na zimę, nie każdy ma pierzynę, pierzynę.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Bum ta ra ra, bum ta ra ra, bum ta ra ra, bum ta ra bum.</span>
+<span class="verse-marker">Zwrotka 2</span>Stój wojak na warcie, na warcie, w przemoczonym kabacie, kabacie,
+Od wieczora do rana, do rana, ranna rosa padała, padała.
+span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Bum ta ra ra, bum ta ra ra, bum ta ra ra, bum ta ra bum.</span>
+<span class="verse-marker">Zwrotka 3</span>Piwka dajcie nam żakom, nam żakom, nam studentom biedakom, biedakom,
+A jak beczka tu pęknie, tu pęknie, zaśpiewamy wam pięknie, wam pięknie.
+span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Bum ta ra ra, bum ta ra ra, bum ta ra ra, bum ta ra bum.</span>
+<span class="verse-marker">Zwrotka 4</span>My w stołówkach żywieni, żywieni i miłości spragnieni, spragnieni,
+A jak student nie może, nie może, to mu piwko pomoże, pomoże.
+span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Bum ta ra ra, bum ta ra ra, bum ta ra ra, bum ta ra bum.</span>
+<span class="verse-marker">Zwrotka 5</span>My w DS-ach mieszkamy, mieszkamy, ciepłych pierzy nie mamy, nie mamy,
+A jak student skostnieje, skostnieje, to go piwko rozgrzeje, rozgrzeje!
+span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Bum ta ra ra, bum ta ra ra, bum ta ra ra, bum ta ra bum.</span>`
+  },
+  {
+    title: "Teraz jest wojna",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Na dworze jest mrok, w pociągu jest tłok, zaczyna się więc sielanka,
+On objął ją w pół, ona gruba jak wół, pod paltem schowana rąbanka.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Teraz jest wojna, kto handluje ten żyje,
+Jak sprzedam rąbankę, słoninę, kaszankę, to bimbru się też napiję.</span>
+<span class="verse-marker">Zwrotka 2</span>Spod serca kap, kap, rąbanka i schab, a pociąg mknie jak szalony,
+Schaboszczak i kicha, to dobra zagrycha, pod ławką dwa salcesony.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Teraz jest wojna, kto handluje ten żyje,
+Jak sprzedam rąbankę, słoninę, kaszankę, to bimbru się też napiję.</span>
+<span class="verse-marker">Zwrotka 3</span>Nim on się przekona, czym handluje ona, to pociąg na dworcu staje,
+Żandarmi wsiadają, wszystko zabierają i nic się już nie zostaje.
+<span class="chorus-marker">Refren</span><span class="repeat-block" data-count="2">Teraz jest wojna, kto nie handluje – nie zbiera,
+Zabrali rąbankę, słoninę, kaszankę, niech weźmie ich jasna cholera!</span>`
+  },
+  {
+    title: "Upływa szybko życie",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Upływa szybko życie, jak potok płynie czas,
+<span class="repeat-block" data-count="2">Za rok, za dzień, za chwilę razem nie będzie nas.</span>
+<span class="verse-marker">Zwrotka 2</span>I nasze młode lata upłyną szybko w dal,
+<span class="repeat-block" data-count="2">A w sercu pozostanie tęsknota, smutek, żal.</span>
+<span class="verse-marker">Zwrotka 3</span>Więc póki młode lata, póki wesołe dni,
+<span class="repeat-block" data-count="2">Niechaj przynajmniej teraz nie płyną gorzkie łzy.</span>
+<span class="verse-marker">Zwrotka 4</span>Choć pamięć o nas zginie już nie za długi czas,
+<span class="repeat-block" data-count="2">Niech piosnka w dal popłynie, póki jesteśmy wraz.</span>
+<span class="verse-marker">Zwrotka 5</span>A jeśli lasów koło złączy zerwaną nić,
+<span class="repeat-block" data-count="2">Będziemy znów pospołu śpiewać, marzyć i śnić.</span>`
+  },
+  {
+    title: "Złoty krążek",
+    lyrics: `<span class="verse-marker">Zwrotka 1</span>Kiedy stoję w pustym oknie i latarni widzę blask,
+Różne myśli wciąż do głowy mi przychodzą.
+Kiedy deszcz jest, chciałbym słońca, kiedy słońce, deszczu chcę,
+Pytam siebie, co od losu można chcieć.
+
+Gdy pomyślę znów o tobie, swoje serce łapię w sieć,
+I przy sobie chciałbym ciebie gdzieś tu mieć.
+Żyję w nerwach, czas się dłuży i tak bardzo cieszę się,
+Że to dziś już do ołtarza wiodę cię.
+<span class="chorus-marker">Refren</span>Ten krążek, złoty krążek, ten złocisty jego blask,
+Ten okrągły jego kształt szczęście niesie.
+Ten krążek, złoty krążek dziś połączy serca dwa,
+Dziś połączy dusze dwie już na wieki.
+<span class="verse-marker">Zwrotka 2</span>Już garnitur wisi w szafie i wypustki widać dwie,
+Mama krzątą się po kuchni, serce płacze.
+Przypomina sobie chwile, jak to dobrze było z nim,
+Jak potrafił mi ozłocić moje życie.
+
+Nagle w domu ktoś się zjawił, zaskrzypiały w kuchni drzwi,
+I ujrzałem w nich przepiękną twoją postać.
+Na niej biała suknia cudna, a na głowie welon był,
+Teraz gotów byłem z nią do ślubu iść.
+<span class="chorus-marker">Refren</span>Ten krążek, złoty krążek, ten złocisty jego blask,
+Ten okrągły jego kształt szczęście niesie.
+Ten krążek, złoty krążek dziś połączy serca dwa,
+Dziś połączy dusze dwie już na wieki.
+<span class="verse-marker">Zwrotka 3</span>Ksiądz w kościele ciebie pyta, czy za męża zgadzasz się,
+Pojąć tego wybranego z twoich snów.
+Mówisz: „tak, ja go kocham, ja z nim szczęście dzielić chcę",
+I obrączkę złotą miękko wkładasz mi.
+
+Potem kwiaty, gratulacje, mówią: „fajną żonę masz",
+Pocałunki i życzenia naszych gości.
+Pełna gala, boski nastrój, goście życzą nam sto lat,
+Może spełnią się życzenia, gdy Bóg da.
+<span class="chorus-marker">Refren</span>Ten krążek, złoty krążek, ten złocisty jego blask,
+Ten okrągły jego kształt szczęście niesie.
+Ten krążek, złoty krążek dziś połączy serca dwa,
+Dziś połączy dusze dwie już na wieki.`
+  }
+];
+
+// --- State ---
+const FONT_PRESETS = [14, 18, 22, 26];
+const FONT_LABELS  = ['S', 'M', 'L', 'XL'];
+let fontIndex = 1; // default M
+let fontSize = FONT_PRESETS[fontIndex];
+let currentQuery = '';
+let currentView = 'list'; // 'list' | 'song'
+
+// --- Elements ---
+const elControls   = document.getElementById('controls');
+const elList       = document.getElementById('song-list');
+const elDetail     = document.getElementById('song-detail');
+const elNoResults  = document.getElementById('no-results');
+const elCount      = document.getElementById('song-count');
+const elBreadcrumb = document.getElementById('breadcrumb');
+const elBcTitle    = document.getElementById('breadcrumb-title');
+const elDetailTitle    = document.getElementById('detail-title');
+const elDetailLyrics   = document.getElementById('detail-lyrics');
+const elSearch     = document.getElementById('search');
+
+// --- Show list view ---
+function showList(query, keepInput) {
+  currentView = 'list';
+  currentQuery = query || '';
+  if (!keepInput) elSearch.value = currentQuery;
+
+  // Toggle visibility
+  elBreadcrumb.style.display = 'none';
+  elList.style.display = 'flex';
+  elDetail.style.display = 'none';
+
+  const diacr = s => s.replace(/[ąĄ]/g,'a').replace(/[ćĆ]/g,'c').replace(/[ęĘ]/g,'e')
+    .replace(/[łŁ]/g,'l').replace(/[ńŃ]/g,'n').replace(/[óÓ]/g,'o')
+    .replace(/[śŚ]/g,'s').replace(/[źŹżŻ]/g,'z');
+  const norm = s => diacr(s.replace(/[^a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ0-9 ]/g, '').trim());
+  const q = norm(currentQuery).toLowerCase();
+  const filtered = (q
+    ? SONGS.filter(s =>
+        norm(s.title).toLowerCase().includes(q) ||
+        norm(s.lyrics.replace(/<[^>]+>/g, '')).toLowerCase().includes(q))
+    : [...SONGS]).sort((a, b) => norm(a.title).localeCompare(norm(b.title), 'pl'));
+
+  elList.innerHTML = '';
+
+  if (filtered.length === 0) {
+    elNoResults.style.display = 'block';
+    elCount.textContent = '';
+    return;
+  }
+  elNoResults.style.display = 'none';
+  const n = filtered.length;
+  elCount.textContent = `${n} ${n === 1 ? 'piosenka' : n < 5 ? 'piosenki' : 'piosenek'}`;
+
+  filtered.forEach((song, i) => {
+    const card = document.createElement('div');
+    card.className = 'song-card';
+    card.innerHTML = `
+      <div class="song-header">
+        <div class="song-title-wrap">
+          <span class="song-title">${song.title}</span>
+        </div>
+        <span class="song-arrow">❯</span>
+      </div>`;
+    card.addEventListener('click', () => showSong(song));
+    elList.appendChild(card);
+  });
+
+  window.scrollTo({ top: 0 });
+}
+
+// --- Position repeat brackets next to longest line ---
+function positionRepeatBrackets() {
+  const lyricsEl = document.getElementById('detail-lyrics');
+  if (!lyricsEl) return;
+  const cs = window.getComputedStyle(lyricsEl);
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+
+  document.querySelectorAll('#detail-lyrics .repeat-block').forEach(block => {
+    let maxWidth = 0;
+    block.textContent.split('\n').forEach(line => {
+      const w = ctx.measureText(line).width;
+      if (w > maxWidth) maxWidth = w;
+    });
+    block.style.setProperty('--bracket-left', Math.round(maxWidth + 12) + 'px');
+  });
+}
+
+// --- Show song detail view ---
+function showSong(song) {
+  currentView = 'song';
+
+  // Breadcrumb
+  elBcTitle.textContent = song.title;
+  elBreadcrumb.style.top = elControls.offsetHeight + 'px';
+  elBreadcrumb.style.display = 'flex';
+
+  // Content
+  elDetailTitle.textContent = song.title;
+  elDetailLyrics.innerHTML = song.lyrics;
+  document.fonts.ready.then(() => requestAnimationFrame(positionRepeatBrackets));
+
+  // Toggle visibility
+  elList.style.display = 'none';
+  elNoResults.style.display = 'none';
+  elCount.style.display = 'none';
+  elDetail.style.display = 'block';
+
+  window.scrollTo({ top: 0 });
+}
+
+// --- Back to list ---
+function goBack() {
+  elCount.style.display = '';
+  showList(currentQuery);
+}
+document.getElementById('breadcrumb-arrow').addEventListener('click', goBack);
+
+// --- Search ---
+const elSearchClear = document.getElementById('search-clear');
+function updateClearBtn() {
+  elSearchClear.style.display = elSearch.value ? 'block' : 'none';
+}
+elSearch.addEventListener('input', function() {
+  if (currentView === 'song') {
+    elCount.style.display = '';
+  }
+  updateClearBtn();
+  showList(this.value.trim(), true);
+});
+elSearchClear.addEventListener('click', function() {
+  elSearch.value = '';
+  updateClearBtn();
+  elSearch.focus();
+  if (currentView === 'song') {
+    elCount.style.display = '';
+  }
+  showList('');
+});
+
+// --- Font size ---
+function applyFontSize() {
+  fontSize = FONT_PRESETS[fontIndex];
+  document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+  document.getElementById('font-size-label').textContent = FONT_LABELS[fontIndex];
+  if (currentView === 'song') requestAnimationFrame(positionRepeatBrackets);
+}
+document.getElementById('font-up').addEventListener('click', () => {
+  if (fontIndex < FONT_PRESETS.length - 1) { fontIndex++; applyFontSize(); }
+});
+document.getElementById('font-down').addEventListener('click', () => {
+  if (fontIndex > 0) { fontIndex--; applyFontSize(); }
+});
+
+// --- Init ---
+showList('');
+applyFontSize();
+
+// --- Service Worker ---
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(() => {
+    // Show offline-ready banner after first cache
+    navigator.serviceWorker.ready.then(() => {
+      const banner = document.getElementById('offline-banner');
+      if (banner) {
+        banner.style.display = 'flex';
+        setTimeout(() => { banner.style.opacity = '0'; setTimeout(() => { banner.style.display = 'none'; }, 600); }, 3500);
+      }
+    });
+  }).catch(() => {});
+}
+</script>
+</body>
+</html>
