@@ -2212,9 +2212,19 @@ window.addEventListener('resize', () => {
   }, 150);
 });
 
+// --- Slug helper ---
+function slugify(title) {
+  return title.toLowerCase()
+    .replace(/[ąĄ]/g,'a').replace(/[ćĆ]/g,'c').replace(/[ęĘ]/g,'e')
+    .replace(/[łŁ]/g,'l').replace(/[ńŃ]/g,'n').replace(/[óÓ]/g,'o')
+    .replace(/[śŚ]/g,'s').replace(/[źŹżŻ]/g,'z')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 // --- Show song detail view ---
-function showSong(song) {
+function showSong(song, push = true) {
   currentView = 'song';
+  if (push) history.pushState({ view: 'song', title: song.title }, '', '#' + slugify(song.title));
 
   // Breadcrumb
   elBcTitle.textContent = song.title;
@@ -2237,10 +2247,22 @@ function showSong(song) {
 
 // --- Back to list ---
 function goBack() {
+  history.pushState({ view: 'list' }, '', location.pathname + location.search);
   elCount.style.display = '';
   showList(currentQuery);
 }
 document.getElementById('breadcrumb-arrow').addEventListener('click', goBack);
+
+// --- Browser back/forward ---
+window.addEventListener('popstate', function(e) {
+  if (!e.state || e.state.view === 'list') {
+    elCount.style.display = '';
+    showList(currentQuery);
+  } else if (e.state.view === 'song') {
+    const song = SONGS.find(s => s.title === e.state.title);
+    if (song) showSong(song, false);
+  }
+});
 
 // --- Search ---
 const elSearchClear = document.getElementById('search-clear');
@@ -2279,7 +2301,15 @@ document.getElementById('font-down').addEventListener('click', () => {
 });
 
 // --- Init ---
-showList('');
+const initHash = location.hash.slice(1);
+const initSong = initHash ? SONGS.find(s => slugify(s.title) === initHash) : null;
+if (initSong) {
+  history.replaceState({ view: 'song', title: initSong.title }, '', '#' + initHash);
+  showSong(initSong, false);
+} else {
+  history.replaceState({ view: 'list' }, '', location.pathname + location.search);
+  showList('');
+}
 applyFontSize();
 
 // --- Service Worker ---
