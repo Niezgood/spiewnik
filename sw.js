@@ -1,4 +1,4 @@
-const CACHE_NAME = 'spiewnik-v2';
+const CACHE_NAME = 'spiewnik-v3';
 const ASSETS = [
   './',
   './index.html'
